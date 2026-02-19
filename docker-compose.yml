@@ -43,7 +43,6 @@ services:
       - "traefik.http.routers.gong-web.entrypoints=websecure"
       - "traefik.http.routers.gong-web.tls.certresolver=letsencrypt"
       - "traefik.http.services.gong-web.loadbalancer.server.port=3000"
-      - "traefik.http.routers.gong-web.priority=1"
     restart: unless-stopped
     deploy:
       resources:
