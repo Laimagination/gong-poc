@@ -1,0 +1,158 @@
+[
+  {
+    "id": "engineering",
+    "name": "Engineering",
+    "headcount": 320,
+    "open_roles": 28,
+    "key_tools": ["GitHub", "Jira", "Jenkins", "Datadog", "PagerDuty", "Confluence", "Slack"],
+    "manual_workflows": [
+      "Sprint planning and story point estimation",
+      "Release notes compilation from merged PRs",
+      "On-call incident triage and escalation",
+      "Environment provisioning for new hires",
+      "Dependency vulnerability review and patching",
+      "Cross-team API contract reviews",
+      "Weekly engineering metrics reporting",
+      "Post-incident review documentation"
+    ]
+  },
+  {
+    "id": "sales",
+    "name": "Sales",
+    "headcount": 210,
+    "open_roles": 35,
+    "key_tools": ["Gong Revenue Intelligence", "Salesforce", "Outreach", "LinkedIn Sales Navigator", "Clari", "Slack"],
+    "manual_workflows": [
+      "Deal review prep and CRM hygiene before forecast calls",
+      "Competitive intel gathering from call transcripts",
+      "New rep territory and account assignment",
+      "Quote and proposal generation for custom deals",
+      "Win/loss analysis report compilation",
+      "Weekly pipeline inspection and stage validation",
+      "Customer reference matching for prospects",
+      "Commission dispute resolution"
+    ]
+  },
+  {
+    "id": "marketing",
+    "name": "Marketing",
+    "headcount": 85,
+    "open_roles": 12,
+    "key_tools": ["Marketo", "Google Analytics", "Contentful", "Figma", "Asana", "6sense", "Slack"],
+    "manual_workflows": [
+      "Campaign performance reporting across channels",
+      "Lead scoring model recalibration",
+      "Content calendar coordination with product launches",
+      "Event follow-up lead routing to SDRs",
+      "Competitive positioning document updates",
+      "ABM target account list refresh"
+    ]
+  },
+  {
+    "id": "customer_success",
+    "name": "Customer Success",
+    "headcount": 130,
+    "open_roles": 18,
+    "key_tools": ["Gainsight", "Gong Revenue Intelligence", "Salesforce", "Zendesk", "Pendo", "Slack"],
+    "manual_workflows": [
+      "Quarterly business review deck preparation",
+      "Health score computation and risk flagging",
+      "Renewal forecast compilation",
+      "Expansion opportunity identification from usage data",
+      "Customer onboarding checklist tracking",
+      "Escalation handoff documentation to support",
+      "NPS follow-up outreach sequencing",
+      "Champion tracking when contacts change roles"
+    ]
+  },
+  {
+    "id": "support",
+    "name": "Support",
+    "headcount": 95,
+    "open_roles": 14,
+    "key_tools": ["Zendesk", "Jira", "Confluence", "Gong Revenue Intelligence", "PagerDuty", "Slack"],
+    "manual_workflows": [
+      "Ticket categorization and priority assignment",
+      "Known-issue matching for incoming tickets",
+      "Bug report creation from support tickets in Jira",
+      "SLA breach monitoring and escalation",
+      "Knowledge base article drafting from resolved tickets",
+      "Weekly support metrics and trend reporting",
+      "Customer communication for outage updates"
+    ]
+  },
+  {
+    "id": "product",
+    "name": "Product",
+    "headcount": 55,
+    "open_roles": 8,
+    "key_tools": ["Productboard", "Jira", "Amplitude", "Figma", "Confluence", "Slack"],
+    "manual_workflows": [
+      "Feature request aggregation from multiple channels",
+      "User research session scheduling and note synthesis",
+      "Competitive feature gap analysis updates",
+      "Release impact assessment documentation",
+      "Beta program participant coordination",
+      "Cross-functional launch readiness checklist"
+    ]
+  },
+  {
+    "id": "people_hr",
+    "name": "People / HR",
+    "headcount": 40,
+    "open_roles": 5,
+    "key_tools": ["Workday", "Greenhouse", "Culture Amp", "Lattice", "Slack"],
+    "manual_workflows": [
+      "New hire onboarding packet assembly",
+      "Interview scheduling across multiple panels",
+      "Performance review cycle coordination",
+      "Benefits enrollment question routing",
+      "Headcount reconciliation with finance",
+      "Employee offboarding checklist execution"
+    ]
+  },
+  {
+    "id": "finance",
+    "name": "Finance",
+    "headcount": 35,
+    "open_roles": 4,
+    "key_tools": ["NetSuite", "Adaptive Planning", "Salesforce", "Excel", "Coupa", "Slack"],
+    "manual_workflows": [
+      "Monthly revenue recognition and reconciliation",
+      "Vendor invoice approval routing",
+      "Budget vs. actuals variance reporting",
+      "Travel and expense policy compliance review",
+      "Sales commission calculation and validation",
+      "Board-deck financial data compilation"
+    ]
+  },
+  {
+    "id": "legal",
+    "name": "Legal",
+    "headcount": 20,
+    "open_roles": 3,
+    "key_tools": ["Ironclad", "DocuSign", "Salesforce", "SharePoint", "Slack"],
+    "manual_workflows": [
+      "Contract redlining and clause negotiation tracking",
+      "NDA processing and counter-party follow-up",
+      "Security questionnaire response assembly",
+      "Privacy impact assessment for new features",
+      "Procurement contract review queue management"
+    ]
+  },
+  {
+    "id": "it",
+    "name": "IT",
+    "headcount": 30,
+    "open_roles": 6,
+    "key_tools": ["Okta", "Jamf", "ServiceNow", "AWS Console", "Slack"],
+    "manual_workflows": [
+      "New employee SaaS account provisioning",
+      "Access review and deprovisioning for offboarded staff",
+      "Shadow IT detection and SaaS license reconciliation",
+      "VPN and security certificate renewal tracking",
+      "Helpdesk ticket triage and first-response",
+      "Software license renewal and true-up reporting"
+    ]
+  }
+]

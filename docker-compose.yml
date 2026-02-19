@@ -1,0 +1,67 @@
+services:
+  backend:
+    image: ghcr.io/laimagination/gong-poc-backend:latest
+    container_name: gong-backend
+    environment:
+      - DATABASE_URL=sqlite:///./data/gong_poc.db
+      - BACKEND_HOST=0.0.0.0
+      - BACKEND_PORT=8000
+    volumes:
+      - backend-data:/app/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gong-api.rule=Host(`gong.davidlaiportfolio.com`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.gong-api.entrypoints=websecure"
+      - "traefik.http.routers.gong-api.tls.certresolver=letsencrypt"
+      - "traefik.http.services.gong-api.loadbalancer.server.port=8000"
+      - "com.centurylinklabs.watchtower.enable=true"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+    networks:
+      - traefik-public
+      - internal
+
+  frontend:
+    image: ghcr.io/laimagination/gong-poc-frontend:latest
+    container_name: gong-frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gong-web.rule=Host(`gong.davidlaiportfolio.com`)"
+      - "traefik.http.routers.gong-web.entrypoints=websecure"
+      - "traefik.http.routers.gong-web.tls.certresolver=letsencrypt"
+      - "traefik.http.services.gong-web.loadbalancer.server.port=3000"
+      - "traefik.http.routers.gong-web.priority=1"
+      - "com.centurylinklabs.watchtower.enable=true"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"
+    healthcheck:
+      test: ["CMD", "node", "-e", "const http = require('http'); http.get('http://localhost:3000/', (r) => { process.exit(r.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
+    networks:
+      - traefik-public
+
+volumes:
+  backend-data:
+
+networks:
+  traefik-public:
+    external: true
+  internal:
+    driver: bridge
