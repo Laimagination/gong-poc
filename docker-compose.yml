@@ -1,6 +1,7 @@
 services:
   backend:
-    image: ghcr.io/laimagination/gong-poc-backend:latest
+    build:
+      context: https://github.com/Laimagination/gong-poc.git#master:backend
     container_name: gong-backend
     environment:
       - DATABASE_URL=sqlite:///./data/gong_poc.db
@@ -14,7 +15,6 @@ services:
       - "traefik.http.routers.gong-api.entrypoints=websecure"
       - "traefik.http.routers.gong-api.tls.certresolver=letsencrypt"
       - "traefik.http.services.gong-api.loadbalancer.server.port=8000"
-      - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
     deploy:
       resources:
@@ -32,7 +32,10 @@ services:
       - internal
 
   frontend:
-    image: ghcr.io/laimagination/gong-poc-frontend:latest
+    build:
+      context: https://github.com/Laimagination/gong-poc.git#master:frontend
+      args:
+        NEXT_PUBLIC_API_URL: /api
     container_name: gong-frontend
     labels:
       - "traefik.enable=true"
@@ -41,7 +44,6 @@ services:
       - "traefik.http.routers.gong-web.tls.certresolver=letsencrypt"
       - "traefik.http.services.gong-web.loadbalancer.server.port=3000"
       - "traefik.http.routers.gong-web.priority=1"
-      - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
     deploy:
       resources:
