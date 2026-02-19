@@ -37,6 +37,9 @@ services:
       args:
         NEXT_PUBLIC_API_URL: /api
     container_name: gong-frontend
+    environment:
+      - HOSTNAME=0.0.0.0
+      - PORT=3000
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.gong-web.rule=Host(`gong.davidlaiportfolio.com`)"
