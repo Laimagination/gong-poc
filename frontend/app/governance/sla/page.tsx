@@ -107,7 +107,7 @@ export default function SLADashboard() {
       </div>
 
       {/* Global Latency Gauges */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <LatencyGauge label="P50 Latency" value={d.latency.p50_ms} threshold={500} />
         <LatencyGauge label="P95 Latency" value={d.latency.p95_ms} threshold={d.thresholds.p95_latency_ms} />
         <LatencyGauge label="P99 Latency" value={d.latency.p99_ms} threshold={d.thresholds.p99_latency_ms} />

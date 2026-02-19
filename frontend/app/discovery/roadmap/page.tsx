@@ -143,7 +143,7 @@ export default function RoadmapPage() {
       </div>
 
       {/* Summary bar */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 opacity-0 animate-fade-up stagger-1">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 opacity-0 animate-fade-up stagger-1">
         <MetricCard
           label="Total Projected Savings"
           value={formatCurrency(roadmap.total_roi_usd)}

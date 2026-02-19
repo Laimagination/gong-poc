@@ -58,7 +58,7 @@ export default function Home() {
           <span className="w-1.5 h-1.5 rounded-full bg-gong-success animate-pulse" />
           Live Portfolio — David Lai
         </div>
-        <h1 className="text-4xl lg:text-5xl font-display font-bold tracking-tight leading-[1.1] mb-4">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold tracking-tight leading-[1.1] mb-4">
           AI Operating Model
           <br />
           <span className="text-gradient">POC Portfolio</span>
@@ -79,20 +79,21 @@ export default function Home() {
               href={poc.href}
               className={`block group opacity-0 animate-fade-up stagger-${i + 2}`}
             >
-              <div className={`relative rounded-xl border border-border bg-surface-2/40 p-6 transition-all duration-300 hover:border-border-strong ${poc.glow} hover:bg-surface-2/70`}>
-                <div className="flex items-start gap-5">
+              <div className={`relative rounded-xl border border-border bg-surface-2/40 p-4 sm:p-6 transition-all duration-300 hover:border-border-strong ${poc.glow} hover:bg-surface-2/70`}>
+                <div className="flex items-start gap-3 sm:gap-5">
                   {/* Icon */}
-                  <div className={`shrink-0 w-11 h-11 rounded-lg bg-gradient-to-br ${poc.accent} flex items-center justify-center shadow-lg`}>
-                    <Icon size={20} className="text-white" />
+                  <div className={`shrink-0 w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-gradient-to-br ${poc.accent} flex items-center justify-center shadow-lg`}>
+                    <Icon size={18} className="text-white sm:hidden" />
+                    <Icon size={20} className="text-white hidden sm:block" />
                   </div>
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
                       <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border ${poc.tagColor}`}>
                         {poc.tag}
                       </span>
-                      <h2 className="text-lg font-display font-semibold text-text-primary group-hover:text-white transition-colors">
+                      <h2 className="text-base sm:text-lg font-display font-semibold text-text-primary group-hover:text-white transition-colors">
                         {poc.title}
                       </h2>
                     </div>
@@ -128,7 +129,7 @@ export default function Home() {
 
       {/* Footer stats */}
       <div className="mt-12 pt-8 border-t border-border opacity-0 animate-fade-up stagger-6">
-        <div className="grid grid-cols-3 gap-6 text-center">
+        <div className="grid grid-cols-3 gap-3 sm:gap-6 text-center">
           {[
             { label: "Backend", value: "FastAPI", sub: "Python 3.11" },
             { label: "Frontend", value: "Next.js 15", sub: "React 19 + Tailwind" },

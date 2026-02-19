@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
@@ -16,6 +17,8 @@ import {
   UserPlus,
   ClipboardList,
   Sparkles,
+  Menu,
+  X,
 } from "lucide-react";
 
 const navSections = [
@@ -52,11 +55,11 @@ const navSections = [
   },
 ];
 
-export default function Sidebar() {
+function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 shrink-0 flex flex-col h-screen bg-surface-1/80 backdrop-blur-xl border-r border-border">
+    <>
       {/* Logo */}
       <div className="p-5 pb-4">
         <div className="flex items-center gap-2.5">
@@ -92,6 +95,7 @@ export default function Sidebar() {
                   <Link
                     key={item.href}
                     href={item.href}
+                    onClick={onNavigate}
                     className={cn(
                       "flex items-center gap-2.5 px-2.5 py-[7px] text-[13px] rounded-lg transition-all duration-200",
                       active
@@ -124,6 +128,79 @@ export default function Sidebar() {
           <p className="text-[9px] text-text-muted">Staff AI Enablement</p>
         </div>
       </div>
-    </aside>
+    </>
+  );
+}
+
+export default function Sidebar() {
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Close drawer on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  // Prevent body scroll when drawer is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
+  return (
+    <>
+      {/* Mobile top bar */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 h-14 flex items-center gap-3 px-4 bg-surface-1/90 backdrop-blur-xl border-b border-border">
+        <button
+          onClick={() => setOpen(true)}
+          className="w-9 h-9 flex items-center justify-center rounded-lg bg-surface-2/60 border border-border text-text-secondary hover:text-text-primary transition-colors"
+          aria-label="Open menu"
+        >
+          <Menu size={18} />
+        </button>
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-md bg-gradient-gong flex items-center justify-center">
+            <Sparkles size={12} className="text-white" />
+          </div>
+          <span className="text-sm font-display font-bold text-text-primary">
+            Gong <span className="text-gradient">AI</span>
+          </span>
+        </div>
+      </div>
+
+      {/* Mobile drawer overlay */}
+      {open && (
+        <div
+          className="md:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+          onClick={() => setOpen(false)}
+        />
+      )}
+
+      {/* Mobile drawer */}
+      <aside
+        className={cn(
+          "md:hidden fixed top-0 left-0 z-50 h-screen w-72 flex flex-col bg-surface-1 border-r border-border transition-transform duration-300 ease-out",
+          open ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        <button
+          onClick={() => setOpen(false)}
+          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg text-text-muted hover:text-text-primary transition-colors"
+          aria-label="Close menu"
+        >
+          <X size={18} />
+        </button>
+        <SidebarContent onNavigate={() => setOpen(false)} />
+      </aside>
+
+      {/* Desktop sidebar */}
+      <aside className="hidden md:flex w-64 shrink-0 flex-col h-screen bg-surface-1/80 backdrop-blur-xl border-r border-border">
+        <SidebarContent />
+      </aside>
+    </>
   );
 }

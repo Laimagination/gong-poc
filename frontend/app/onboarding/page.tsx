@@ -119,7 +119,7 @@ function WorkflowNode({
   return (
     <div
       className={cn(
-        "relative flex flex-col items-center rounded-xl border-2 p-5 w-44 transition-all",
+        "relative flex flex-col items-center rounded-xl border-2 p-4 sm:p-5 w-36 sm:w-44 transition-all",
         status === "completed" && "border-gong-success bg-green-500/10",
         status === "active" && "border-gong-purple bg-purple-500/10 animate-pulse",
         status === "pending" && "border-border bg-surface-3"
@@ -165,7 +165,7 @@ function WorkflowFlowchart() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center justify-center overflow-x-auto py-4 gap-0">
+        <div className="flex items-center justify-start sm:justify-center overflow-x-auto py-4 gap-0 pb-2">
           {WORKFLOW_NODES.map((node, i) => (
             <div key={node.id} className="flex items-center">
               <WorkflowNode node={node} status="pending" />
@@ -239,11 +239,11 @@ function RecentOnboardings() {
               <thead>
                 <tr className="border-b border-border text-left text-text-muted">
                   <th className="pb-2 font-medium">Name</th>
-                  <th className="pb-2 font-medium">Department</th>
-                  <th className="pb-2 font-medium">Role</th>
+                  <th className="pb-2 font-medium hidden sm:table-cell">Department</th>
+                  <th className="pb-2 font-medium hidden sm:table-cell">Role</th>
                   <th className="pb-2 font-medium">Status</th>
                   <th className="pb-2 font-medium">Progress</th>
-                  <th className="pb-2 font-medium">Created</th>
+                  <th className="pb-2 font-medium hidden md:table-cell">Created</th>
                 </tr>
               </thead>
               <tbody>
@@ -260,8 +260,8 @@ function RecentOnboardings() {
                         {item.new_hire_name}
                       </Link>
                     </td>
-                    <td className="py-3 text-text-secondary">{item.department}</td>
-                    <td className="py-3 text-text-secondary">{item.role}</td>
+                    <td className="py-3 text-text-secondary hidden sm:table-cell">{item.department}</td>
+                    <td className="py-3 text-text-secondary hidden sm:table-cell">{item.role}</td>
                     <td className="py-3">
                       <Badge variant={statusBadgeVariant(item.status)}>
                         {item.status}
@@ -280,7 +280,7 @@ function RecentOnboardings() {
                         </span>
                       </div>
                     </td>
-                    <td className="py-3 text-text-muted text-xs">
+                    <td className="py-3 text-text-muted text-xs hidden md:table-cell">
                       {new Date(item.created_at).toLocaleDateString()}
                     </td>
                   </tr>

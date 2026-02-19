@@ -344,11 +344,11 @@ function OnboardingListView() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <Badge variant={stepBadgeVariant(item.status)}>
+                  <div className="flex items-center gap-2 sm:gap-4">
+                    <Badge variant={stepBadgeVariant(item.status)} className="hidden sm:inline-flex">
                       {item.status}
                     </Badge>
-                    <div className="flex items-center gap-2 w-32">
+                    <div className="flex items-center gap-2 w-20 sm:w-32">
                       <div className="flex-1 h-2 rounded-full bg-surface-4 overflow-hidden">
                         <div
                           className="h-full rounded-full bg-gradient-gong transition-all"
