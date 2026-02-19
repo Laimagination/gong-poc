@@ -4,7 +4,7 @@ services:
       context: https://github.com/Laimagination/gong-poc.git#master:backend
     container_name: gong-backend
     environment:
-      - DATABASE_URL=sqlite:///./data/gong_poc.db
+      - DATABASE_URL=sqlite+aiosqlite:///./data/gong_poc.db
       - BACKEND_HOST=0.0.0.0
       - BACKEND_PORT=8000
     volumes:
