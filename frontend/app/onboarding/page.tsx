@@ -120,9 +120,9 @@ function WorkflowNode({
     <div
       className={cn(
         "relative flex flex-col items-center rounded-xl border-2 p-5 w-44 transition-all",
-        status === "completed" && "border-gong-success bg-green-50",
-        status === "active" && "border-gong-purple bg-purple-50 animate-pulse",
-        status === "pending" && "border-gray-200 bg-gray-50"
+        status === "completed" && "border-gong-success bg-green-500/10",
+        status === "active" && "border-gong-purple bg-purple-500/10 animate-pulse",
+        status === "pending" && "border-border bg-surface-3"
       )}
     >
       <div
@@ -130,16 +130,16 @@ function WorkflowNode({
           "flex items-center justify-center w-10 h-10 rounded-full mb-3",
           status === "completed" && "bg-gong-success text-white",
           status === "active" && "bg-gong-purple text-white",
-          status === "pending" && "bg-gray-300 text-white"
+          status === "pending" && "bg-surface-4 text-text-muted"
         )}
       >
         <Icon size={20} />
       </div>
-      <span className="font-semibold text-sm text-center leading-tight">
+      <span className="font-semibold text-sm text-center leading-tight text-text-primary">
         {node.label}
       </span>
-      <span className="text-[11px] text-gray-500 mt-1">{node.agent}</span>
-      <span className="text-[10px] text-gray-400 mt-2 text-center leading-snug">
+      <span className="text-[11px] text-text-muted mt-1">{node.agent}</span>
+      <span className="text-[10px] text-text-muted mt-2 text-center leading-snug">
         {node.description}
       </span>
     </div>
@@ -149,8 +149,8 @@ function WorkflowNode({
 function ArrowConnector() {
   return (
     <div className="flex items-center justify-center shrink-0 mx-1">
-      <div className="w-8 h-0.5 bg-gray-300" />
-      <ArrowRight size={16} className="text-gray-400 -ml-1" />
+      <div className="w-8 h-0.5 bg-border-strong" />
+      <ArrowRight size={16} className="text-text-muted -ml-1" />
     </div>
   );
 }
@@ -173,7 +173,7 @@ function WorkflowFlowchart() {
             </div>
           ))}
         </div>
-        <p className="text-xs text-gray-400 text-center mt-4">
+        <p className="text-xs text-text-muted text-center mt-4">
           Each node represents an autonomous LangGraph agent. Trigger a new hire
           to see the workflow animate in real-time.
         </p>
@@ -213,14 +213,14 @@ function RecentOnboardings() {
         )}
 
         {error && (
-          <div className="flex items-center gap-2 rounded-lg bg-red-50 p-4 text-sm text-red-700">
+          <div className="flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/20 p-4 text-sm text-red-400">
             <AlertCircle size={16} />
             Failed to load onboardings. Check that the backend is running.
           </div>
         )}
 
         {data && data.length === 0 && (
-          <div className="text-center py-12 text-gray-400">
+          <div className="text-center py-12 text-text-muted">
             <Users size={40} className="mx-auto mb-3 opacity-40" />
             <p className="text-sm">No onboardings yet.</p>
             <p className="text-xs mt-1">
@@ -237,7 +237,7 @@ function RecentOnboardings() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b text-left text-gray-500">
+                <tr className="border-b border-border text-left text-text-muted">
                   <th className="pb-2 font-medium">Name</th>
                   <th className="pb-2 font-medium">Department</th>
                   <th className="pb-2 font-medium">Role</th>
@@ -250,7 +250,7 @@ function RecentOnboardings() {
                 {data.map((item) => (
                   <tr
                     key={item.id}
-                    className="border-b last:border-0 hover:bg-gray-50 transition-colors"
+                    className="border-b border-border last:border-0 hover:bg-surface-3 transition-colors"
                   >
                     <td className="py-3">
                       <Link
@@ -260,8 +260,8 @@ function RecentOnboardings() {
                         {item.new_hire_name}
                       </Link>
                     </td>
-                    <td className="py-3 text-gray-600">{item.department}</td>
-                    <td className="py-3 text-gray-600">{item.role}</td>
+                    <td className="py-3 text-text-secondary">{item.department}</td>
+                    <td className="py-3 text-text-secondary">{item.role}</td>
                     <td className="py-3">
                       <Badge variant={statusBadgeVariant(item.status)}>
                         {item.status}
@@ -269,18 +269,18 @@ function RecentOnboardings() {
                     </td>
                     <td className="py-3">
                       <div className="flex items-center gap-2">
-                        <div className="h-2 w-24 rounded-full bg-gray-200 overflow-hidden">
+                        <div className="h-2 w-24 rounded-full bg-surface-4 overflow-hidden">
                           <div
-                            className="h-full rounded-full bg-gong-purple transition-all"
+                            className="h-full rounded-full bg-gradient-gong transition-all"
                             style={{ width: `${item.progress_pct}%` }}
                           />
                         </div>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-text-muted">
                           {item.progress_pct}%
                         </span>
                       </div>
                     </td>
-                    <td className="py-3 text-gray-500 text-xs">
+                    <td className="py-3 text-text-muted text-xs">
                       {new Date(item.created_at).toLocaleDateString()}
                     </td>
                   </tr>
@@ -300,10 +300,10 @@ export default function OnboardingPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gong-slate">
+        <h1 className="text-2xl font-display font-bold text-text-primary">
           AI Onboarding Orchestrator
         </h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-text-secondary mt-1">
           LangGraph-powered multi-agent workflow for automated employee
           onboarding
         </p>

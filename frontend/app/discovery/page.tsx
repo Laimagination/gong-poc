@@ -120,8 +120,8 @@ export default function DiscoveryBacklogPage() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <p className="text-red-600 font-medium mb-1">Failed to load backlog</p>
-          <p className="text-sm text-gray-500">{(error as Error).message}</p>
+          <p className="text-red-400 font-medium mb-1">Failed to load backlog</p>
+          <p className="text-sm text-text-muted">{(error as Error).message}</p>
         </div>
       </div>
     );
@@ -129,12 +129,12 @@ export default function DiscoveryBacklogPage() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gong-slate">Automation Backlog</h1>
-        <p className="text-gray-500 mt-1">Scored AI opportunities across every Gong department</p>
+      <div className="opacity-0 animate-fade-up">
+        <h1 className="text-2xl font-bold font-display text-text-primary">Automation Backlog</h1>
+        <p className="text-text-secondary mt-1">Scored AI opportunities across every Gong department</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 opacity-0 animate-fade-up stagger-1">
         <MetricCard
           label="Total Opportunities"
           value={String(items.length)}
@@ -156,25 +156,25 @@ export default function DiscoveryBacklogPage() {
       </div>
 
       {/* Controls */}
-      <Card>
+      <Card className="opacity-0 animate-fade-up stagger-2">
         <CardContent className="p-4">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
               <input
                 type="text"
                 placeholder="Search workflows, departments, principles..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-gong-purple/30 focus:border-gong-purple"
+                className="w-full pl-9 pr-3 py-2 text-sm bg-surface-3 border border-border text-text-primary placeholder:text-text-muted rounded-lg focus:outline-none focus:ring-1 focus:ring-gong-purple/30 focus:border-gong-purple"
               />
             </div>
             <div className="flex items-center gap-2">
-              <Filter size={16} className="text-gray-400" />
+              <Filter size={16} className="text-text-muted" />
               <select
                 value={filterDept}
                 onChange={(e) => setFilterDept(e.target.value)}
-                className="text-sm border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gong-purple/30 focus:border-gong-purple"
+                className="text-sm bg-surface-3 border border-border text-text-primary rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gong-purple/30 focus:border-gong-purple"
               >
                 <option value="all">All Departments</option>
                 {deptNames.map((d) => (
@@ -183,11 +183,11 @@ export default function DiscoveryBacklogPage() {
               </select>
             </div>
             <div className="flex items-center gap-2">
-              <ArrowUpDown size={16} className="text-gray-400" />
+              <ArrowUpDown size={16} className="text-text-muted" />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as SortField)}
-                className="text-sm border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gong-purple/30 focus:border-gong-purple"
+                className="text-sm bg-surface-3 border border-border text-text-primary rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gong-purple/30 focus:border-gong-purple"
               >
                 <option value="score">Sort by Score</option>
                 <option value="roi">Sort by ROI</option>
@@ -198,30 +198,30 @@ export default function DiscoveryBacklogPage() {
         </CardContent>
       </Card>
 
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-text-muted">
         Showing {filtered.length} of {items.length} opportunities
       </p>
 
       {/* Card Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {filtered.map((opp) => (
-          <OpportunityCard key={opp.id} opp={opp} />
+        {filtered.map((opp, i) => (
+          <OpportunityCard key={opp.id} opp={opp} index={i} />
         ))}
       </div>
 
       {filtered.length === 0 && (
-        <div className="text-center py-12 text-gray-400">No opportunities match your filters</div>
+        <div className="text-center py-12 text-text-muted">No opportunities match your filters</div>
       )}
     </div>
   );
 }
 
-function OpportunityCard({ opp }: { opp: BacklogItem }) {
+function OpportunityCard({ opp, index }: { opp: BacklogItem; index: number }) {
   const deptVariant = DEPT_COLORS[opp.department] ?? "default";
   const effortVariant = EFFORT_COLORS[opp.effort] ?? "default";
 
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card className={`hover:border-border-strong transition-all opacity-0 animate-fade-up stagger-${Math.min(index % 6, 5)}`}>
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
@@ -233,7 +233,7 @@ function OpportunityCard({ opp }: { opp: BacklogItem }) {
           </div>
           <div className="text-right shrink-0">
             <div className="text-2xl font-bold text-gong-purple">{opp.composite_score.toFixed(1)}</div>
-            <div className="text-[10px] text-gray-400 uppercase tracking-wide">Score</div>
+            <div className="text-[10px] text-text-muted uppercase tracking-wide">Score</div>
           </div>
         </div>
       </CardHeader>
@@ -241,19 +241,19 @@ function OpportunityCard({ opp }: { opp: BacklogItem }) {
         <div className="flex items-center gap-1.5 text-sm">
           <TrendingUp size={14} className="text-gong-success" />
           <span className="font-semibold text-gong-success">{formatCurrency(opp.estimated_roi_usd)}</span>
-          <span className="text-gray-400 text-xs">est. annual ROI</span>
+          <span className="text-text-muted text-xs">est. annual ROI</span>
         </div>
         {opp.jim_principles.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {opp.jim_principles.map((p) => (
-              <span key={p} className="inline-flex items-center gap-1 text-[10px] bg-amber-50 text-amber-700 rounded px-1.5 py-0.5">
+              <span key={p} className="inline-flex items-center gap-1 text-[10px] bg-amber-500/10 text-amber-400 rounded px-1.5 py-0.5">
                 <Sparkles size={10} />
                 {p.replace(/_/g, " ")}
               </span>
             ))}
           </div>
         )}
-        <p className="text-xs text-gray-500 line-clamp-2 italic">&ldquo;{opp.user_story}&rdquo;</p>
+        <p className="text-xs text-text-muted line-clamp-2 italic">&ldquo;{opp.user_story}&rdquo;</p>
       </CardContent>
     </Card>
   );

@@ -37,7 +37,7 @@ function Spinner() {
 
 function ErrorBox({ message }: { message: string }) {
   return (
-    <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+    <div className="rounded-lg border border-gong-danger/20 bg-gong-danger/10 p-4 text-sm text-gong-danger">
       {message}
     </div>
   );
@@ -143,7 +143,7 @@ export default function AuditLog() {
   if (isError) return <ErrorBox message={`Failed to load audit log: ${(error as Error).message}`} />;
 
   const SortIcon = ({ col }: { col: SortKey }) => {
-    if (sortKey !== col) return <span className="text-gray-300 ml-1">&#8597;</span>;
+    if (sortKey !== col) return <span className="text-text-muted ml-1">&#8597;</span>;
     return <span className="text-gong-purple ml-1">{sortDir === "asc" ? "\u25B2" : "\u25BC"}</span>;
   };
 
@@ -151,8 +151,8 @@ export default function AuditLog() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gong-slate">Audit Log</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-display font-bold text-text-primary">Audit Log</h1>
+          <p className="text-sm text-text-secondary mt-1">
             {data!.total_records} total entries{filtered.length !== data!.total_records ? ` (${filtered.length} filtered)` : ""}
           </p>
         </div>
@@ -174,12 +174,12 @@ export default function AuditLog() {
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(0); }}
               placeholder="Search..."
-              className="flex-1 min-w-[200px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gong-purple"
+              className="flex-1 min-w-[200px] rounded-lg bg-surface-3 border border-border text-text-primary placeholder:text-text-muted px-3 py-2 text-sm focus:outline-none focus:border-gong-purple focus:ring-1 focus:ring-gong-purple/30"
             />
             <select
               value={deptFilter}
               onChange={(e) => { setDeptFilter(e.target.value); setPage(0); }}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gong-purple"
+              className="rounded-lg bg-surface-3 border border-border text-text-primary px-3 py-2 text-sm focus:outline-none focus:border-gong-purple focus:ring-1 focus:ring-gong-purple/30"
             >
               <option value="all">All Departments</option>
               {departments.map((d) => (
@@ -189,7 +189,7 @@ export default function AuditLog() {
             <select
               value={modelFilter}
               onChange={(e) => { setModelFilter(e.target.value); setPage(0); }}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gong-purple"
+              className="rounded-lg bg-surface-3 border border-border text-text-primary px-3 py-2 text-sm focus:outline-none focus:border-gong-purple focus:ring-1 focus:ring-gong-purple/30"
             >
               <option value="all">All Models</option>
               {models.map((m) => (
@@ -205,7 +205,7 @@ export default function AuditLog() {
         <CardContent className="pt-5 overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b text-left text-gray-500">
+              <tr className="border-b border-border text-left text-text-secondary bg-surface-2/40">
                 {[
                   { key: "timestamp" as SortKey, label: "Time" },
                   { key: "department" as SortKey, label: "Department" },
@@ -229,23 +229,23 @@ export default function AuditLog() {
             <tbody>
               {pageEntries.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-gray-400">
+                  <td colSpan={7} className="py-8 text-center text-text-muted">
                     No entries found
                   </td>
                 </tr>
               ) : (
                 pageEntries.map((entry) => (
-                  <tr key={entry.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                    <td className="py-3 pr-4 whitespace-nowrap text-gray-600">
+                  <tr key={entry.id} className="border-b border-border hover:bg-white/[0.02] transition-colors">
+                    <td className="py-3 pr-4 whitespace-nowrap text-text-secondary">
                       {new Date(entry.timestamp).toLocaleString()}
                     </td>
-                    <td className="py-3 pr-4">{entry.department}</td>
+                    <td className="py-3 pr-4 text-text-secondary">{entry.department}</td>
                     <td className="py-3 pr-4">
-                      <code className="text-xs bg-gray-100 rounded px-1.5 py-0.5">{entry.model}</code>
+                      <code className="text-xs bg-white/[0.06] text-text-primary rounded px-1.5 py-0.5">{entry.model}</code>
                     </td>
-                    <td className="py-3 pr-4 text-right tabular-nums">{entry.total_tokens.toLocaleString()}</td>
-                    <td className="py-3 pr-4 text-right tabular-nums">${entry.cost_usd.toFixed(4)}</td>
-                    <td className="py-3 pr-4 text-right tabular-nums">{entry.latency_ms}ms</td>
+                    <td className="py-3 pr-4 text-right tabular-nums text-text-secondary">{entry.total_tokens.toLocaleString()}</td>
+                    <td className="py-3 pr-4 text-right tabular-nums text-text-secondary">${entry.cost_usd.toFixed(4)}</td>
+                    <td className="py-3 pr-4 text-right tabular-nums text-text-secondary">{entry.latency_ms}ms</td>
                     <td className="py-3 pr-4">
                       <Badge variant={STATUS_VARIANT[entry.status] || "default"}>
                         {entry.status}
@@ -262,14 +262,14 @@ export default function AuditLog() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between text-sm">
-          <p className="text-gray-500">
+          <p className="text-text-secondary">
             Showing {page * PAGE_SIZE + 1}-{Math.min((page + 1) * PAGE_SIZE, filtered.length)} of {filtered.length}
           </p>
           <div className="flex gap-2">
             <button
               onClick={() => setPage((p) => Math.max(0, p - 1))}
               disabled={page === 0}
-              className="px-3 py-1.5 rounded-lg border text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-3 py-1.5 rounded-lg bg-surface-3 border border-border text-text-secondary hover:text-text-primary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               Previous
             </button>
@@ -282,7 +282,7 @@ export default function AuditLog() {
                   className={`px-3 py-1.5 rounded-lg border transition-colors ${
                     page === pageNum
                       ? "bg-gong-purple text-white border-gong-purple"
-                      : "text-gray-600 hover:bg-gray-50"
+                      : "bg-surface-3 border-border text-text-secondary hover:text-text-primary"
                   }`}
                 >
                   {pageNum + 1}
@@ -292,7 +292,7 @@ export default function AuditLog() {
             <button
               onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
               disabled={page >= totalPages - 1}
-              className="px-3 py-1.5 rounded-lg border text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-3 py-1.5 rounded-lg bg-surface-3 border border-border text-text-secondary hover:text-text-primary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               Next
             </button>

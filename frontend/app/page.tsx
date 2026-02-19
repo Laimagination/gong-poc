@@ -1,72 +1,146 @@
 import Link from "next/link";
-import { Shield, Search, Users } from "lucide-react";
+import { Shield, Search, Users, ArrowRight, Zap, BarChart3, Globe } from "lucide-react";
 
 const pocs = [
   {
     title: "AI Governance & Cost Platform",
-    desc: "Multi-model routing with LiteLLM, real-time cost tracking, SLA monitoring, and ISO 42001-aligned audit logging. Demonstrates financial governance and vendor management at scale.",
+    desc: "Multi-model routing with LiteLLM, real-time cost tracking, SLA monitoring, and ISO 42001-aligned audit logging.",
     href: "/governance",
     icon: Shield,
-    color: "bg-purple-50 border-purple-200 text-purple-700",
-    iconColor: "text-purple-600",
-    metrics: ["3 LLM Providers", "Dept Chargeback", "p50/p95/p99 SLAs"],
+    accent: "from-gong-purple to-gong-purple-dark",
+    glow: "group-hover:shadow-glow",
+    metrics: [
+      { label: "3 LLM Providers", icon: Globe },
+      { label: "Dept Chargeback", icon: BarChart3 },
+      { label: "p50/p95/p99 SLAs", icon: Zap },
+    ],
+    tag: "POC 1",
+    tagColor: "text-gong-purple-light bg-gong-purple/10 border-gong-purple/20",
   },
   {
     title: "Mining for Gold Discovery Engine",
-    desc: "Systematic AI opportunity discovery across every Gong department. Four-dimension scoring model, prioritized backlog, and a 90-day phased roadmap aligned to Jim Gearhart's published IT philosophy.",
+    desc: "Systematic AI opportunity discovery across every Gong department. Four-dimension scoring model with 90-day phased roadmap.",
     href: "/discovery",
     icon: Search,
-    color: "bg-cyan-50 border-cyan-200 text-cyan-700",
-    iconColor: "text-cyan-600",
-    metrics: ["Department Scan", "Weighted Scoring", "90-Day Roadmap"],
+    accent: "from-gong-accent to-cyan-700",
+    glow: "group-hover:shadow-glow-accent",
+    metrics: [
+      { label: "Department Scan", icon: Globe },
+      { label: "Weighted Scoring", icon: BarChart3 },
+      { label: "90-Day Roadmap", icon: Zap },
+    ],
+    tag: "POC 2",
+    tagColor: "text-gong-accent-light bg-gong-accent/10 border-gong-accent/20",
   },
   {
     title: "AI Onboarding Orchestrator",
-    desc: "LangGraph-powered multi-agent workflow for employee onboarding. Coordinates identity provisioning, workspace setup, and equipment ordering with real-time progress tracking.",
+    desc: "LangGraph-powered multi-agent workflow for employee onboarding with real-time progress tracking via WebSocket.",
     href: "/onboarding",
     icon: Users,
-    color: "bg-emerald-50 border-emerald-200 text-emerald-700",
-    iconColor: "text-emerald-600",
-    metrics: ["5 AI Agents", "Live WebSocket", "Mock Enterprise APIs"],
+    accent: "from-gong-success to-emerald-700",
+    glow: "group-hover:shadow-[0_0_20px_rgba(16,185,129,0.15)]",
+    metrics: [
+      { label: "5 AI Agents", icon: Globe },
+      { label: "Live WebSocket", icon: Zap },
+      { label: "Mock Enterprise APIs", icon: BarChart3 },
+    ],
+    tag: "POC 3",
+    tagColor: "text-gong-success bg-gong-success/10 border-gong-success/20",
   },
 ];
 
 export default function Home() {
   return (
-    <div className="max-w-5xl mx-auto">
-      <div className="mb-10">
-        <h1 className="text-3xl font-bold text-gong-slate">AI Operating Model POC Portfolio</h1>
-        <p className="text-gray-500 mt-2 text-lg">
-          Three proof-of-concept demos spanning Strategy & Governance, Discovery & Execution, and Financial & Performance Operations.
+    <div className="max-w-4xl mx-auto py-4">
+      {/* Hero */}
+      <div className="mb-12 opacity-0 animate-fade-up">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface-2/60 text-[11px] text-text-muted mb-5">
+          <span className="w-1.5 h-1.5 rounded-full bg-gong-success animate-pulse" />
+          Live Portfolio — David Lai
+        </div>
+        <h1 className="text-4xl lg:text-5xl font-display font-bold tracking-tight leading-[1.1] mb-4">
+          AI Operating Model
+          <br />
+          <span className="text-gradient">POC Portfolio</span>
+        </h1>
+        <p className="text-text-secondary text-lg max-w-2xl leading-relaxed">
+          Three proof-of-concept demos spanning Strategy & Governance,
+          Discovery & Execution, and Onboarding Operations.
         </p>
       </div>
 
-      <div className="grid gap-6">
-        {pocs.map((poc) => {
+      {/* POC Cards */}
+      <div className="space-y-4">
+        {pocs.map((poc, i) => {
           const Icon = poc.icon;
           return (
-            <Link key={poc.href} href={poc.href} className="block group">
-              <div className={`rounded-xl border-2 p-6 transition-shadow hover:shadow-lg ${poc.color}`}>
-                <div className="flex items-start gap-4">
-                  <div className={`p-3 rounded-lg bg-white/70 ${poc.iconColor}`}>
-                    <Icon size={28} />
+            <Link
+              key={poc.href}
+              href={poc.href}
+              className={`block group opacity-0 animate-fade-up stagger-${i + 2}`}
+            >
+              <div className={`relative rounded-xl border border-border bg-surface-2/40 p-6 transition-all duration-300 hover:border-border-strong ${poc.glow} hover:bg-surface-2/70`}>
+                <div className="flex items-start gap-5">
+                  {/* Icon */}
+                  <div className={`shrink-0 w-11 h-11 rounded-lg bg-gradient-to-br ${poc.accent} flex items-center justify-center shadow-lg`}>
+                    <Icon size={20} className="text-white" />
                   </div>
-                  <div className="flex-1">
-                    <h2 className="text-xl font-semibold mb-2 group-hover:underline">{poc.title}</h2>
-                    <p className="text-sm opacity-80 mb-4">{poc.desc}</p>
-                    <div className="flex gap-3 flex-wrap">
-                      {poc.metrics.map((m) => (
-                        <span key={m} className="text-xs font-medium bg-white/60 rounded-full px-3 py-1">
-                          {m}
-                        </span>
-                      ))}
+
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border ${poc.tagColor}`}>
+                        {poc.tag}
+                      </span>
+                      <h2 className="text-lg font-display font-semibold text-text-primary group-hover:text-white transition-colors">
+                        {poc.title}
+                      </h2>
                     </div>
+                    <p className="text-sm text-text-secondary mb-4 leading-relaxed">{poc.desc}</p>
+
+                    {/* Metric pills */}
+                    <div className="flex flex-wrap gap-2">
+                      {poc.metrics.map((m) => {
+                        const MIcon = m.icon;
+                        return (
+                          <span
+                            key={m.label}
+                            className="inline-flex items-center gap-1.5 text-[11px] text-text-muted bg-white/[0.03] border border-border rounded-full px-2.5 py-1"
+                          >
+                            <MIcon size={11} />
+                            {m.label}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Arrow */}
+                  <div className="shrink-0 self-center opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                    <ArrowRight size={18} className="text-text-muted" />
                   </div>
                 </div>
               </div>
             </Link>
           );
         })}
+      </div>
+
+      {/* Footer stats */}
+      <div className="mt-12 pt-8 border-t border-border opacity-0 animate-fade-up stagger-6">
+        <div className="grid grid-cols-3 gap-6 text-center">
+          {[
+            { label: "Backend", value: "FastAPI", sub: "Python 3.11" },
+            { label: "Frontend", value: "Next.js 15", sub: "React 19 + Tailwind" },
+            { label: "Deployment", value: "Docker", sub: "Traefik + SSL" },
+          ].map((s) => (
+            <div key={s.label}>
+              <p className="text-[10px] uppercase tracking-wider text-text-muted mb-1">{s.label}</p>
+              <p className="text-sm font-semibold text-text-primary font-display">{s.value}</p>
+              <p className="text-[11px] text-text-muted">{s.sub}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

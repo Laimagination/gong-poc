@@ -87,15 +87,15 @@ export default function NewHirePage() {
   }
 
   const inputClass =
-    "w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gong-slate placeholder:text-gray-400 focus:border-gong-purple focus:outline-none focus:ring-2 focus:ring-gong-purple/20 transition-colors";
+    "w-full rounded-lg border border-border bg-surface-3 px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-gong-purple focus:outline-none focus:ring-1 focus:ring-gong-purple/30 transition-colors";
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gong-slate">
+        <h1 className="text-2xl font-display font-bold text-text-primary">
           Trigger New Hire Onboarding
         </h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-text-secondary mt-1">
           Enter the new employee details to kick off the AI onboarding workflow
         </p>
       </div>
@@ -113,9 +113,9 @@ export default function NewHirePage() {
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1.5"
+                className="block text-sm font-medium text-text-secondary mb-1.5"
               >
-                Full Name <span className="text-red-500">*</span>
+                Full Name <span className="text-red-400">*</span>
               </label>
               <input
                 id="name"
@@ -132,9 +132,9 @@ export default function NewHirePage() {
             <div>
               <label
                 htmlFor="department"
-                className="block text-sm font-medium text-gray-700 mb-1.5"
+                className="block text-sm font-medium text-text-secondary mb-1.5"
               >
-                Department <span className="text-red-500">*</span>
+                Department <span className="text-red-400">*</span>
               </label>
               <select
                 id="department"
@@ -156,9 +156,9 @@ export default function NewHirePage() {
             <div>
               <label
                 htmlFor="role"
-                className="block text-sm font-medium text-gray-700 mb-1.5"
+                className="block text-sm font-medium text-text-secondary mb-1.5"
               >
-                Role <span className="text-red-500">*</span>
+                Role <span className="text-red-400">*</span>
               </label>
               <input
                 id="role"
@@ -175,9 +175,9 @@ export default function NewHirePage() {
             <div>
               <label
                 htmlFor="start_date"
-                className="block text-sm font-medium text-gray-700 mb-1.5"
+                className="block text-sm font-medium text-text-secondary mb-1.5"
               >
-                Start Date <span className="text-red-500">*</span>
+                Start Date <span className="text-red-400">*</span>
               </label>
               <input
                 id="start_date"
@@ -191,7 +191,7 @@ export default function NewHirePage() {
 
             {/* Validation error */}
             {validationError && (
-              <div className="flex items-center gap-2 rounded-lg bg-yellow-50 border border-yellow-200 p-3 text-sm text-yellow-800">
+              <div className="flex items-center gap-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20 p-3 text-sm text-yellow-400">
                 <AlertCircle size={16} className="shrink-0" />
                 {validationError}
               </div>
@@ -199,7 +199,7 @@ export default function NewHirePage() {
 
             {/* Mutation error */}
             {mutation.isError && (
-              <div className="flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+              <div className="flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/20 p-3 text-sm text-red-400">
                 <AlertCircle size={16} className="shrink-0" />
                 Failed to trigger onboarding. Please check the backend and try
                 again.

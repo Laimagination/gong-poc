@@ -54,7 +54,7 @@ function ResponsePanel({ result, tier }: { result: ChatResponse; tier: Tier }) {
           <MetricCard label="Cost" value={`$${result.cost_usd.toFixed(4)}`} color="text-gong-warning" />
           <MetricCard label="Latency" value={`${result.latency_ms}ms`} color="text-gong-accent" />
         </div>
-        <div className="rounded-lg bg-gray-50 border p-4 text-sm text-gong-slate whitespace-pre-wrap">
+        <div className="rounded-lg bg-surface-2/60 border border-border p-4 text-sm text-text-primary whitespace-pre-wrap">
           {result.response}
         </div>
       </CardContent>
@@ -116,8 +116,8 @@ export default function RoutingPlayground() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gong-slate">Model Routing Playground</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-2xl font-display font-bold text-text-primary">Model Routing Playground</h1>
+        <p className="text-sm text-text-secondary mt-1">
           Test the intelligent routing engine across task complexity tiers
         </p>
       </div>
@@ -136,7 +136,7 @@ export default function RoutingPlayground() {
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                       tier === opt.value
                         ? "bg-gong-purple text-white"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        : "bg-surface-3 text-text-secondary hover:text-text-primary border border-border"
                     }`}
                   >
                     {opt.label}
@@ -144,12 +144,12 @@ export default function RoutingPlayground() {
                 ))}
               </div>
             )}
-            <label className="flex items-center gap-2 text-sm text-gray-600 ml-auto cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-text-secondary ml-auto cursor-pointer">
               <input
                 type="checkbox"
                 checked={compareMode}
                 onChange={(e) => setCompareMode(e.target.checked)}
-                className="rounded border-gray-300 text-gong-purple focus:ring-gong-purple"
+                className="rounded border-border bg-surface-3 text-gong-purple focus:ring-gong-purple"
               />
               Compare all tiers
             </label>
@@ -157,7 +157,7 @@ export default function RoutingPlayground() {
 
           {/* Selected tier description */}
           {!compareMode && (
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-text-muted">
               {TIER_OPTIONS.find((o) => o.value === tier)?.description}
             </p>
           )}
@@ -169,7 +169,7 @@ export default function RoutingPlayground() {
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="Enter a prompt to test routing..."
               rows={3}
-              className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gong-purple focus:border-transparent resize-none"
+              className="flex-1 rounded-lg bg-surface-3 border border-border text-text-primary placeholder:text-text-muted px-4 py-3 text-sm focus:outline-none focus:border-gong-purple focus:ring-1 focus:ring-gong-purple/30 resize-none"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleSend();
               }}
@@ -177,7 +177,7 @@ export default function RoutingPlayground() {
           </div>
 
           <div className="flex items-center justify-between">
-            <p className="text-xs text-gray-400">Ctrl+Enter to send</p>
+            <p className="text-xs text-text-muted">Ctrl+Enter to send</p>
             <button
               onClick={handleSend}
               disabled={!prompt.trim() || singleMutation.isPending || compareLoading}
@@ -192,7 +192,7 @@ export default function RoutingPlayground() {
 
       {/* Single Result */}
       {!compareMode && singleMutation.isError && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        <div className="rounded-lg border border-gong-danger/20 bg-gong-danger/10 p-4 text-sm text-gong-danger">
           {(singleMutation.error as Error).message}
         </div>
       )}
@@ -202,7 +202,7 @@ export default function RoutingPlayground() {
 
       {/* Compare Results */}
       {compareMode && compareError && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        <div className="rounded-lg border border-gong-danger/20 bg-gong-danger/10 p-4 text-sm text-gong-danger">
           {compareError}
         </div>
       )}
@@ -219,7 +219,7 @@ export default function RoutingPlayground() {
             ) : (
               <Card key={t} className="opacity-50">
                 <CardHeader>
-                  <CardTitle className="text-base text-gray-400">
+                  <CardTitle className="text-base text-text-muted">
                     {t.charAt(0).toUpperCase() + t.slice(1)} - Failed
                   </CardTitle>
                 </CardHeader>

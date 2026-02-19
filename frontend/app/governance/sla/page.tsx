@@ -40,7 +40,7 @@ function Spinner() {
 
 function ErrorBox({ message }: { message: string }) {
   return (
-    <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+    <div className="rounded-lg border border-gong-danger/20 bg-gong-danger/10 p-4 text-sm text-gong-danger">
       {message}
     </div>
   );
@@ -52,13 +52,13 @@ function LatencyGauge({ label, value, threshold }: { label: string; value: numbe
   const color = pct > 90 ? "bg-gong-danger" : pct > 70 ? "bg-gong-warning" : "bg-gong-success";
 
   return (
-    <div className="bg-white rounded-xl border p-5 space-y-3">
+    <div className="bg-surface-2/60 rounded-xl border border-border p-5 space-y-3">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-500">{label}</p>
-        <p className="text-xs text-gray-400">Target: {threshold}ms</p>
+        <p className="text-sm text-text-secondary">{label}</p>
+        <p className="text-xs text-text-muted">Target: {threshold}ms</p>
       </div>
-      <p className="text-3xl font-bold text-gong-slate">{v.toFixed(0)}ms</p>
-      <div className="w-full bg-gray-100 rounded-full h-2">
+      <p className="text-3xl font-bold text-text-primary">{v.toFixed(0)}ms</p>
+      <div className="w-full bg-white/[0.06] rounded-full h-2">
         <div className={`${color} h-2 rounded-full transition-all`} style={{ width: `${pct}%` }} />
       </div>
     </div>
@@ -91,13 +91,13 @@ export default function SLADashboard() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gong-slate">SLA Monitor</h1>
-          <p className="text-sm text-gray-500 mt-1">Real-time latency, error rates, and uptime tracking</p>
+          <h1 className="text-2xl font-display font-bold text-text-primary">SLA Monitor</h1>
+          <p className="text-sm text-text-secondary mt-1">Real-time latency, error rates, and uptime tracking</p>
         </div>
         <select
           value={modelFilter}
           onChange={(e) => setModelFilter(e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gong-purple"
+          className="rounded-lg bg-surface-3 border border-border text-text-primary px-3 py-2 text-sm focus:outline-none focus:border-gong-purple focus:ring-1 focus:ring-gong-purple/30"
         >
           <option value="all">All Models</option>
           {models.map((m) => (
@@ -141,15 +141,15 @@ export default function SLADashboard() {
                   key={i}
                   className={`flex items-center justify-between rounded-lg border p-3 text-sm ${
                     alert.severity === "critical"
-                      ? "border-red-200 bg-red-50"
-                      : "border-yellow-200 bg-yellow-50"
+                      ? "border-gong-danger/20 bg-gong-danger/10"
+                      : "border-gong-warning/20 bg-gong-warning/10"
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <Badge variant={alert.severity === "critical" ? "red" : "yellow"}>
                       {alert.severity}
                     </Badge>
-                    <span className="text-gong-slate">{alert.message}</span>
+                    <span className="text-text-primary">{alert.message}</span>
                   </div>
                 </div>
               ))}
@@ -195,15 +195,15 @@ export default function SLADashboard() {
             <CardContent>
               <div className="grid grid-cols-3 gap-3">
                 <div className="text-center">
-                  <p className="text-xs text-gray-500">Requests</p>
-                  <p className="text-lg font-semibold text-gong-slate">{model.request_count}</p>
+                  <p className="text-xs text-text-secondary">Requests</p>
+                  <p className="text-lg font-semibold text-text-primary">{model.request_count}</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-xs text-gray-500">Avg Latency</p>
-                  <p className="text-lg font-semibold text-gong-slate">{model.avg_latency_ms.toFixed(0)}ms</p>
+                  <p className="text-xs text-text-secondary">Avg Latency</p>
+                  <p className="text-lg font-semibold text-text-primary">{model.avg_latency_ms.toFixed(0)}ms</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-xs text-gray-500">Errors</p>
+                  <p className="text-xs text-text-secondary">Errors</p>
                   <p className="text-lg font-semibold text-gong-danger">{model.error_count}</p>
                 </div>
               </div>

@@ -186,8 +186,8 @@ export default function ScoringExplorerPage() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <p className="text-red-600 font-medium mb-1">Failed to load scoring data</p>
-          <p className="text-sm text-gray-500">{(error as Error).message}</p>
+          <p className="text-red-400 font-medium mb-1">Failed to load scoring data</p>
+          <p className="text-sm text-text-muted">{(error as Error).message}</p>
         </div>
       </div>
     );
@@ -195,24 +195,24 @@ export default function ScoringExplorerPage() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gong-slate flex items-center gap-2">
+      <div className="opacity-0 animate-fade-up">
+        <h1 className="text-2xl font-bold font-display text-text-primary flex items-center gap-2">
           <SlidersHorizontal size={24} className="text-gong-purple" />
           Scoring Explorer
         </h1>
-        <p className="text-gray-500 mt-1">
+        <p className="text-text-secondary mt-1">
           Adjust scoring weights and see real-time re-ranking of automation opportunities
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 opacity-0 animate-fade-up stagger-1">
         {/* Left: weight sliders */}
         <div className="lg:col-span-1 space-y-4">
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center justify-between">
                 Scoring Weights
-                <span className="text-xs font-normal text-gray-400">
+                <span className="text-xs font-normal text-text-muted">
                   Total: {(totalWeight * 100).toFixed(0)}%
                 </span>
               </CardTitle>
@@ -229,7 +229,7 @@ export default function ScoringExplorerPage() {
               ))}
 
               {Math.abs(totalWeight - 1) > 0.01 && (
-                <div className="text-xs text-amber-600 bg-amber-50 rounded-lg p-2">
+                <div className="text-xs text-amber-400 bg-amber-500/10 rounded-lg p-2">
                   Weights sum to {(totalWeight * 100).toFixed(0)}%. Consider adjusting to total 100%.
                 </div>
               )}
@@ -245,7 +245,7 @@ export default function ScoringExplorerPage() {
                 </button>
                 <button
                   onClick={handleReset}
-                  className="flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium text-text-secondary bg-surface-3 border border-border rounded-lg hover:text-text-primary hover:border-border-strong transition-colors"
                 >
                   <RotateCcw size={14} />
                   Reset
@@ -253,7 +253,7 @@ export default function ScoringExplorerPage() {
               </div>
 
               {saveMutation.isSuccess && (
-                <p className="text-xs text-green-600">Weights saved and rankings updated</p>
+                <p className="text-xs text-green-400">Weights saved and rankings updated</p>
               )}
             </CardContent>
           </Card>
@@ -270,7 +270,7 @@ export default function ScoringExplorerPage() {
                       className="w-3 h-3 rounded-full"
                       style={{ backgroundColor: getDeptColor(dept, allDepts) }}
                     />
-                    <span className="text-gray-700">{deptLabel(dept)}</span>
+                    <span className="text-text-secondary">{deptLabel(dept)}</span>
                   </div>
                 ))}
               </div>
@@ -287,21 +287,23 @@ export default function ScoringExplorerPage() {
             <CardContent>
               <ResponsiveContainer width="100%" height={320}>
                 <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 10 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
                   <XAxis
                     type="number"
                     dataKey="x"
                     name="Score"
-                    tick={{ fontSize: 12 }}
-                    label={{ value: "Composite Score", position: "bottom", fontSize: 12, fill: "#9CA3AF" }}
+                    tick={{ fontSize: 12, fill: "#94A3B8" }}
+                    stroke="rgba(255,255,255,0.06)"
+                    label={{ value: "Composite Score", position: "bottom", fontSize: 12, fill: "#64748B" }}
                   />
                   <YAxis
                     type="number"
                     dataKey="y"
                     name="ROI"
-                    tick={{ fontSize: 12 }}
+                    tick={{ fontSize: 12, fill: "#94A3B8" }}
+                    stroke="rgba(255,255,255,0.06)"
                     tickFormatter={(v: number) => formatCurrency(v)}
-                    label={{ value: "Est. ROI", angle: -90, position: "insideLeft", fontSize: 12, fill: "#9CA3AF" }}
+                    label={{ value: "Est. ROI", angle: -90, position: "insideLeft", fontSize: 12, fill: "#64748B" }}
                   />
                   <ZAxis type="number" dataKey="z" range={[40, 120]} />
                   <ReTooltip
@@ -309,11 +311,11 @@ export default function ScoringExplorerPage() {
                       if (!payload?.length) return null;
                       const d = payload[0].payload;
                       return (
-                        <div className="bg-white border rounded-lg p-2 shadow-lg text-xs">
-                          <p className="font-semibold">{d.name}</p>
-                          <p className="text-gray-500">{deptLabel(d.department)}</p>
-                          <p>Score: {d.x?.toFixed(2)}</p>
-                          <p>ROI: {formatCurrency(d.y)}</p>
+                        <div className="bg-surface-3 border border-border rounded-lg p-2 shadow-lg text-xs">
+                          <p className="font-semibold text-text-primary">{d.name}</p>
+                          <p className="text-text-muted">{deptLabel(d.department)}</p>
+                          <p className="text-text-secondary">Score: {d.x?.toFixed(2)}</p>
+                          <p className="text-text-secondary">ROI: {formatCurrency(d.y)}</p>
                         </div>
                       );
                     }}
@@ -332,7 +334,7 @@ export default function ScoringExplorerPage() {
             <CardHeader>
               <CardTitle className="text-base">
                 Live Ranking
-                <span className="text-xs font-normal text-gray-400 ml-2">
+                <span className="text-xs font-normal text-text-muted ml-2">
                   {workflows.length} opportunities
                 </span>
               </CardTitle>
@@ -347,30 +349,30 @@ export default function ScoringExplorerPage() {
                   return (
                     <div
                       key={wf.id}
-                      className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-all"
+                      className="flex items-center gap-3 p-3 rounded-lg bg-surface-2/60 hover:bg-surface-3 border border-border hover:border-border-strong transition-all"
                     >
                       <div className="w-8 text-center">
-                        <span className="text-sm font-bold text-gray-400">#{idx + 1}</span>
+                        <span className="text-sm font-bold text-text-muted">#{idx + 1}</span>
                       </div>
 
                       <div className="w-6 flex justify-center">
                         {movement > 0 ? (
-                          <span className="flex items-center text-green-600">
+                          <span className="flex items-center text-green-400">
                             <ArrowUp size={14} />
                             <span className="text-[10px] font-semibold">{movement}</span>
                           </span>
                         ) : movement < 0 ? (
-                          <span className="flex items-center text-red-500">
+                          <span className="flex items-center text-red-400">
                             <ArrowDown size={14} />
                             <span className="text-[10px] font-semibold">{Math.abs(movement)}</span>
                           </span>
                         ) : (
-                          <Minus size={14} className="text-gray-300" />
+                          <Minus size={14} className="text-text-muted" />
                         )}
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-800 truncate">{wf.name}</p>
+                        <p className="text-sm font-medium text-text-primary truncate">{wf.name}</p>
                         <div className="flex items-center gap-2 mt-0.5">
                           <Badge
                             variant={
@@ -390,7 +392,7 @@ export default function ScoringExplorerPage() {
                           >
                             {deptLabel(wf.department)}
                           </Badge>
-                          <span className="text-[10px] text-gray-400">{effort} effort</span>
+                          <span className="text-[10px] text-text-muted">{effort} effort</span>
                         </div>
                       </div>
 
@@ -407,7 +409,7 @@ export default function ScoringExplorerPage() {
                               className="w-3 bg-gong-purple/70 rounded-sm transition-all"
                               style={{ height: `${b.val * 32}px` }}
                             />
-                            <span className="text-[8px] text-gray-400">{b.label}</span>
+                            <span className="text-[8px] text-text-muted">{b.label}</span>
                           </div>
                         ))}
                       </div>
@@ -445,12 +447,12 @@ function WeightSlider({
   return (
     <div>
       <div className="flex items-center justify-between mb-1">
-        <label className="text-sm font-medium text-gray-700">{label}</label>
+        <label className="text-sm font-medium text-text-secondary">{label}</label>
         <span className="text-sm font-semibold text-gong-purple">
           {(value * 100).toFixed(0)}%
         </span>
       </div>
-      <p className="text-[11px] text-gray-400 mb-2">{description}</p>
+      <p className="text-[11px] text-text-muted mb-2">{description}</p>
       <input
         type="range"
         min={0}
@@ -458,9 +460,9 @@ function WeightSlider({
         step={0.05}
         value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))}
-        className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gong-purple"
+        className="w-full h-1.5 bg-surface-3 rounded-lg appearance-none cursor-pointer accent-gong-purple"
       />
-      <div className="flex justify-between text-[10px] text-gray-300 mt-0.5">
+      <div className="flex justify-between text-[10px] text-text-muted mt-0.5">
         <span>0%</span>
         <span>50%</span>
         <span>100%</span>

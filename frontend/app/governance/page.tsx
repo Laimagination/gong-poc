@@ -37,7 +37,7 @@ function Spinner() {
 
 function ErrorBox({ message }: { message: string }) {
   return (
-    <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+    <div className="rounded-lg border border-gong-danger/20 bg-gong-danger/10 p-4 text-sm text-gong-danger">
       {message}
     </div>
   );
@@ -68,8 +68,8 @@ export default function GovernanceDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gong-slate">Cost Dashboard</h1>
-        <p className="text-sm text-gray-500 mt-1">AI governance spend overview and forecasting</p>
+        <h1 className="text-2xl font-display font-bold text-text-primary">Cost Dashboard</h1>
+        <p className="text-sm text-text-secondary mt-1">AI governance spend overview and forecasting</p>
       </div>
 
       {/* Metric Cards */}
