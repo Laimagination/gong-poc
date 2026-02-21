@@ -119,7 +119,10 @@ export default function GovernanceDashboard() {
           </CardHeader>
           <CardContent>
             <BarChartCard
-              data={c.by_department.map((d) => ({ name: d.department, spend: d.total_cost }))}
+              data={c.by_department.map((d) => ({
+                name: d.department.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+                spend: d.total_cost,
+              }))}
               dataKey="spend"
             />
           </CardContent>

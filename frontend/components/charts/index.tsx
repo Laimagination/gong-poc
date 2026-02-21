@@ -28,9 +28,9 @@ interface ChartProps {
 export function BarChartCard({ data, dataKey, nameKey = "name", height = 280 }: ChartProps & { dataKey: string; nameKey?: string }) {
   return (
     <ResponsiveContainer width="100%" height={height}>
-      <ReBarChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -10 }}>
+      <ReBarChart data={data} margin={{ top: 4, right: 4, bottom: 40, left: -10 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" vertical={false} />
-        <XAxis dataKey={nameKey} tick={axisStyle} axisLine={false} tickLine={false} />
+        <XAxis dataKey={nameKey} tick={axisStyle} axisLine={false} tickLine={false} interval={0} angle={-35} textAnchor="end" />
         <YAxis tick={axisStyle} axisLine={false} tickLine={false} />
         <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "rgba(35,95,246,0.04)" }} />
         <Bar dataKey={dataKey} fill="#235FF6" radius={[4, 4, 0, 0]} />
