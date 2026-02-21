@@ -10,25 +10,25 @@ from ..config import get_settings
 
 # Per-token pricing (USD) - input / output per token
 MODEL_PRICING = {
-    "gpt-4o-mini": {"input": 0.15 / 1_000_000, "output": 0.60 / 1_000_000},
-    "gpt-4o": {"input": 2.50 / 1_000_000, "output": 10.00 / 1_000_000},
-    "claude-3-5-sonnet-20241022": {"input": 3.00 / 1_000_000, "output": 15.00 / 1_000_000},
-    "gemini/gemini-1.5-pro": {"input": 1.25 / 1_000_000, "output": 5.00 / 1_000_000},
+    "gpt-4.1-mini": {"input": 0.15 / 1_000_000, "output": 0.60 / 1_000_000},
+    "gpt-4.1": {"input": 2.50 / 1_000_000, "output": 10.00 / 1_000_000},
+    "claude-sonnet-4-6": {"input": 3.00 / 1_000_000, "output": 15.00 / 1_000_000},
+    "gemini/gemini-2.5-pro": {"input": 1.25 / 1_000_000, "output": 5.00 / 1_000_000},
 }
 
 # Tier -> ordered list of models to try (first = primary, rest = fallbacks)
 TIER_ROUTING = {
-    "simple": ["gpt-4o-mini", "gemini/gemini-1.5-pro"],
-    "moderate": ["gpt-4o", "gemini/gemini-1.5-pro", "gpt-4o-mini"],
-    "complex": ["claude-3-5-sonnet-20241022", "gpt-4o", "gemini/gemini-1.5-pro"],
+    "simple": ["gpt-4.1-mini", "gemini/gemini-2.5-pro"],
+    "moderate": ["gpt-4.1", "gemini/gemini-2.5-pro", "gpt-4.1-mini"],
+    "complex": ["claude-sonnet-4-6", "gpt-4.1", "gemini/gemini-2.5-pro"],
 }
 
 # Provider prefix mapping for litellm
 PROVIDER_FOR_MODEL = {
-    "gpt-4o-mini": "openai",
-    "gpt-4o": "openai",
-    "claude-3-5-sonnet-20241022": "anthropic",
-    "gemini/gemini-1.5-pro": "google",
+    "gpt-4.1-mini": "openai",
+    "gpt-4.1": "openai",
+    "claude-sonnet-4-6": "anthropic",
+    "gemini/gemini-2.5-pro": "google",
 }
 
 

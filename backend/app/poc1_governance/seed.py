@@ -26,28 +26,28 @@ DEPARTMENTS = {
 
 # Model configs: provider, tier distribution, token ranges
 MODELS = {
-    "gpt-4o-mini": {
+    "gpt-4.1-mini": {
         "provider": "openai",
         "tier": "simple",
         "input_range": (50, 500),
         "output_range": (30, 400),
         "latency_range": (200, 1200),
     },
-    "gpt-4o": {
+    "gpt-4.1": {
         "provider": "openai",
         "tier": "moderate",
         "input_range": (100, 2000),
         "output_range": (100, 1500),
         "latency_range": (500, 3000),
     },
-    "claude-3-5-sonnet-20241022": {
+    "claude-sonnet-4-6": {
         "provider": "anthropic",
         "tier": "complex",
         "input_range": (200, 4000),
         "output_range": (200, 3000),
         "latency_range": (800, 5000),
     },
-    "gemini/gemini-1.5-pro": {
+    "gemini/gemini-2.5-pro": {
         "provider": "google",
         "tier": "moderate",
         "input_range": (100, 1500),
@@ -58,9 +58,9 @@ MODELS = {
 
 # Tier distribution for model selection (what % of calls go to each tier)
 TIER_MODEL_WEIGHTS = {
-    "simple": {"gpt-4o-mini": 85, "gemini/gemini-1.5-pro": 15},
-    "moderate": {"gpt-4o": 70, "gemini/gemini-1.5-pro": 30},
-    "complex": {"claude-3-5-sonnet-20241022": 80, "gpt-4o": 20},
+    "simple": {"gpt-4.1-mini": 85, "gemini/gemini-2.5-pro": 15},
+    "moderate": {"gpt-4.1": 70, "gemini/gemini-2.5-pro": 30},
+    "complex": {"claude-sonnet-4-6": 80, "gpt-4.1": 20},
 }
 
 # Tier distribution per department
