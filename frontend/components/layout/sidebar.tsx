@@ -31,20 +31,20 @@ const navSections = [
     ],
   },
   {
+    title: "Discovery",
+    items: [
+      { label: "Backlog", href: "/discovery", icon: Search },
+      { label: "Scoring Model", href: "/discovery/scoring", icon: SlidersHorizontal },
+      { label: "90-Day Roadmap", href: "/discovery/roadmap", icon: Map },
+    ],
+  },
+  {
     title: "Governance",
     items: [
       { label: "Cost Dashboard", href: "/governance", icon: Shield },
       { label: "Model Routing", href: "/governance/routing", icon: Route },
       { label: "SLA Monitor", href: "/governance/sla", icon: Activity },
       { label: "Audit Log", href: "/governance/audit", icon: FileText },
-    ],
-  },
-  {
-    title: "Discovery",
-    items: [
-      { label: "Backlog", href: "/discovery", icon: Search },
-      { label: "Scoring Model", href: "/discovery/scoring", icon: SlidersHorizontal },
-      { label: "90-Day Roadmap", href: "/discovery/roadmap", icon: Map },
     ],
   },
   {

@@ -3,21 +3,6 @@ import { Shield, Search, ShieldCheck, ArrowRight, Zap, BarChart3, Globe } from "
 
 const modules = [
   {
-    title: "AI Governance & Cost Platform",
-    desc: "Multi-model routing with LiteLLM, real-time cost tracking, SLA monitoring, and ISO 42001-aligned audit logging.",
-    href: "/governance",
-    icon: Shield,
-    accent: "from-gong-purple to-gong-purple-dark",
-    glow: "group-hover:shadow-glow",
-    metrics: [
-      { label: "3 LLM Providers", icon: Globe },
-      { label: "Dept Chargeback", icon: BarChart3 },
-      { label: "p50/p95/p99 SLAs", icon: Zap },
-    ],
-    tag: "Governance",
-    tagColor: "text-gong-purple-light bg-gong-purple/10 border-gong-purple/20",
-  },
-  {
     title: "Mining for Gold Discovery Engine",
     desc: "Systematic AI opportunity discovery across every Gong department. Four-dimension scoring model with 90-day phased roadmap.",
     href: "/discovery",
@@ -31,6 +16,21 @@ const modules = [
     ],
     tag: "Discovery",
     tagColor: "text-gong-accent-light bg-gong-accent/10 border-gong-accent/20",
+  },
+  {
+    title: "AI Governance & Cost Platform",
+    desc: "Multi-model routing with LiteLLM, real-time cost tracking, SLA monitoring, and ISO 42001-aligned audit logging.",
+    href: "/governance",
+    icon: Shield,
+    accent: "from-gong-purple to-gong-purple-dark",
+    glow: "group-hover:shadow-glow",
+    metrics: [
+      { label: "3 LLM Providers", icon: Globe },
+      { label: "Dept Chargeback", icon: BarChart3 },
+      { label: "p50/p95/p99 SLAs", icon: Zap },
+    ],
+    tag: "Governance",
+    tagColor: "text-gong-purple-light bg-gong-purple/10 border-gong-purple/20",
   },
   {
     title: "AI Impact Assessment & Lifecycle",
