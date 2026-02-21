@@ -93,7 +93,7 @@ export default function Home() {
                       <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border ${poc.tagColor}`}>
                         {poc.tag}
                       </span>
-                      <h2 className="text-base sm:text-lg font-display font-semibold text-text-primary group-hover:text-white transition-colors">
+                      <h2 className="text-base sm:text-lg font-display font-semibold text-text-primary group-hover:text-gong-purple transition-colors">
                         {poc.title}
                       </h2>
                     </div>
@@ -106,7 +106,7 @@ export default function Home() {
                         return (
                           <span
                             key={m.label}
-                            className="inline-flex items-center gap-1.5 text-[11px] text-text-muted bg-white/[0.03] border border-border rounded-full px-2.5 py-1"
+                            className="inline-flex items-center gap-1.5 text-[11px] text-text-muted bg-surface-2/60 border border-border rounded-full px-2.5 py-1"
                           >
                             <MIcon size={11} />
                             {m.label}

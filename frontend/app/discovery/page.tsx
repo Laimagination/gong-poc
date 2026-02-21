@@ -120,7 +120,7 @@ export default function DiscoveryBacklogPage() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <p className="text-red-400 font-medium mb-1">Failed to load backlog</p>
+          <p className="text-red-600 font-medium mb-1">Failed to load backlog</p>
           <p className="text-sm text-text-muted">{(error as Error).message}</p>
         </div>
       </div>
@@ -246,7 +246,7 @@ function OpportunityCard({ opp, index }: { opp: BacklogItem; index: number }) {
         {opp.jim_principles.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {opp.jim_principles.map((p) => (
-              <span key={p} className="inline-flex items-center gap-1 text-[10px] bg-amber-500/10 text-amber-400 rounded px-1.5 py-0.5">
+              <span key={p} className="inline-flex items-center gap-1 text-[10px] bg-amber-500/10 text-amber-600 rounded px-1.5 py-0.5">
                 <Sparkles size={10} />
                 {p.replace(/_/g, " ")}
               </span>

@@ -45,15 +45,15 @@ interface TimelineEvent {
 
 /* ---------- constants ---------- */
 const tooltipStyle = {
-  backgroundColor: "#1A1F2E",
-  border: "1px solid rgba(255,255,255,0.1)",
+  backgroundColor: "#FFFFFF",
+  border: "1px solid rgba(0,0,0,0.1)",
   borderRadius: "8px",
-  boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+  boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
   fontSize: "12px",
-  color: "#F1F5F9",
+  color: "#0F172A",
 };
 
-const axisStyle = { fontSize: 11, fill: "#64748B" };
+const axisStyle = { fontSize: 11, fill: "#94A3B8" };
 
 const STATUS_COLORS: Record<string, string> = {
   proposed: "#64748B",
@@ -231,7 +231,7 @@ export default function AIMSDashboard() {
               >
                 <CartesianGrid
                   strokeDasharray="3 3"
-                  stroke="rgba(255,255,255,0.04)"
+                  stroke="rgba(0,0,0,0.06)"
                   horizontal={false}
                 />
                 <XAxis
@@ -249,12 +249,12 @@ export default function AIMSDashboard() {
                   tickLine={false}
                   width={100}
                 />
-                <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "rgba(124,58,237,0.06)" }} />
+                <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "rgba(35,95,246,0.04)" }} />
                 <Bar dataKey="count" radius={[0, 4, 4, 0]} barSize={20}>
                   {statusData.map((entry, i) => (
                     <Cell
                       key={`status-${i}`}
-                      fill={STATUS_COLORS[entry.key] ?? "#7C3AED"}
+                      fill={STATUS_COLORS[entry.key] ?? "#235FF6"}
                     />
                   ))}
                 </Bar>
@@ -279,7 +279,7 @@ export default function AIMSDashboard() {
                   innerRadius={50}
                   dataKey="count"
                   nameKey="name"
-                  stroke="rgba(0,0,0,0.3)"
+                  stroke="#FFFFFF"
                   strokeWidth={2}
                   label={({ name, percent }) =>
                     `${name} ${(percent * 100).toFixed(0)}%`
@@ -288,13 +288,13 @@ export default function AIMSDashboard() {
                   {riskData.map((entry, i) => (
                     <Cell
                       key={`risk-${i}`}
-                      fill={RISK_COLORS[entry.key] ?? "#7C3AED"}
+                      fill={RISK_COLORS[entry.key] ?? "#235FF6"}
                     />
                   ))}
                 </Pie>
                 <Tooltip contentStyle={tooltipStyle} />
                 <Legend
-                  wrapperStyle={{ fontSize: "11px", color: "#94A3B8" }}
+                  wrapperStyle={{ fontSize: "11px", color: "#475569" }}
                 />
               </PieChart>
             </ResponsiveContainer>

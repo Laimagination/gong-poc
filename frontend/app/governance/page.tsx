@@ -147,7 +147,7 @@ export default function GovernanceDashboard() {
           <CardContent>
             <LineChartCard
               data={c.daily_trend.map((d) => ({ name: d.date, spend: d.total_cost }))}
-              lines={[{ key: "spend", color: "#7C3AED" }]}
+              lines={[{ key: "spend", color: "#235FF6" }]}
             />
           </CardContent>
         </Card>
@@ -160,7 +160,7 @@ export default function GovernanceDashboard() {
             <LineChartCard
               data={f.daily_history.map((d) => ({ name: d.date, actual: d.cost, forecast: f.avg_daily_cost }))}
               lines={[
-                { key: "actual", color: "#7C3AED" },
+                { key: "actual", color: "#235FF6" },
                 { key: "forecast", color: "#06B6D4" },
               ]}
             />

@@ -6,12 +6,12 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-white/5 text-text-secondary border-border",
-        purple: "bg-gong-purple/10 text-gong-purple-light border-gong-purple/20",
-        cyan: "bg-gong-accent/10 text-gong-accent-light border-gong-accent/20",
-        green: "bg-gong-success/10 text-gong-success border-gong-success/20",
-        yellow: "bg-gong-warning/10 text-gong-warning border-gong-warning/20",
-        red: "bg-gong-danger/10 text-gong-danger border-gong-danger/20",
+        default: "bg-surface-2 text-text-secondary border-border",
+        purple: "bg-gong-purple/8 text-gong-purple border-gong-purple/15",
+        cyan: "bg-gong-accent/8 text-gong-accent-light border-gong-accent/15",
+        green: "bg-gong-success/8 text-emerald-700 border-gong-success/15",
+        yellow: "bg-gong-warning/8 text-amber-700 border-gong-warning/15",
+        red: "bg-gong-danger/8 text-red-700 border-gong-danger/15",
       },
     },
     defaultVariants: { variant: "default" },

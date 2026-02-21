@@ -58,7 +58,7 @@ function LatencyGauge({ label, value, threshold }: { label: string; value: numbe
         <p className="text-xs text-text-muted">Target: {threshold}ms</p>
       </div>
       <p className="text-3xl font-bold text-text-primary">{v.toFixed(0)}ms</p>
-      <div className="w-full bg-white/[0.06] rounded-full h-2">
+      <div className="w-full bg-surface-3 rounded-full h-2">
         <div className={`${color} h-2 rounded-full transition-all`} style={{ width: `${pct}%` }} />
       </div>
     </div>
@@ -172,7 +172,7 @@ export default function SLADashboard() {
                 errors: h.error_count,
               }))}
               lines={[
-                { key: "latency", color: "#7C3AED" },
+                { key: "latency", color: "#235FF6" },
                 { key: "errors", color: "#EF4444" },
               ]}
             />

@@ -42,7 +42,7 @@ interface GraphStats {
 
 /* ---------- constants ---------- */
 const NODE_COLORS: Record<string, string> = {
-  Department: "#7C3AED",
+  Department: "#235FF6",
   Workflow: "#06B6D4",
   AIProject: "#10B981",
   Tool: "#F59E0B",
@@ -161,7 +161,7 @@ export default function KnowledgeGraphPage() {
         ctx.font = `${fontSize}px Inter, sans-serif`;
         ctx.textAlign = "center";
         ctx.textBaseline = "top";
-        ctx.fillStyle = "rgba(241, 245, 249, 0.8)";
+        ctx.fillStyle = "rgba(15, 23, 42, 0.8)";
         ctx.fillText(displayName, x, y + size + 2);
       }
     },
@@ -208,7 +208,7 @@ export default function KnowledgeGraphPage() {
           label="AI Projects"
           value={stats?.nodes?.AIProject?.toString() || "--"}
           sub="Tracked in AIMS"
-          color="text-emerald-400"
+          color="text-emerald-600"
         />
       </div>
 
@@ -257,7 +257,7 @@ export default function KnowledgeGraphPage() {
       <Card>
         <CardContent className="p-0 overflow-hidden rounded-xl">
           <div
-            className="w-full bg-[#0D1117]"
+            className="w-full bg-[#F8FAFC]"
             style={{ height: 600 }}
           >
             {isLoading ? (
@@ -277,12 +277,12 @@ export default function KnowledgeGraphPage() {
                   ctx.fillStyle = color;
                   ctx.fill();
                 }}
-                linkColor={() => "rgba(255,255,255,0.08)"}
+                linkColor={() => "rgba(0,0,0,0.1)"}
                 linkWidth={0.5}
                 linkDirectionalArrowLength={3}
                 linkDirectionalArrowRelPos={1}
                 onNodeClick={handleNodeClick}
-                backgroundColor="#0D1117"
+                backgroundColor="#F8FAFC"
                 width={typeof window !== "undefined" ? window.innerWidth - 320 : 900}
                 height={600}
                 cooldownTicks={100}

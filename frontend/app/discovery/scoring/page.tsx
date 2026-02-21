@@ -73,7 +73,7 @@ const WEIGHT_DESCRIPTIONS: Record<keyof Weights, string> = {
   self_service_potential: "Potential for employee self-service adoption",
 };
 
-const COLORS = ["#7C3AED", "#06B6D4", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#14B8A6"];
+const COLORS = ["#235FF6", "#06B6D4", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#14B8A6"];
 
 function getDeptColor(dept: string, allDepts: string[]): string {
   const idx = allDepts.indexOf(dept);
@@ -186,7 +186,7 @@ export default function ScoringExplorerPage() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <p className="text-red-400 font-medium mb-1">Failed to load scoring data</p>
+          <p className="text-red-600 font-medium mb-1">Failed to load scoring data</p>
           <p className="text-sm text-text-muted">{(error as Error).message}</p>
         </div>
       </div>
@@ -229,7 +229,7 @@ export default function ScoringExplorerPage() {
               ))}
 
               {Math.abs(totalWeight - 1) > 0.01 && (
-                <div className="text-xs text-amber-400 bg-amber-500/10 rounded-lg p-2">
+                <div className="text-xs text-amber-600 bg-amber-500/10 rounded-lg p-2">
                   Weights sum to {(totalWeight * 100).toFixed(0)}%. Consider adjusting to total 100%.
                 </div>
               )}
@@ -253,7 +253,7 @@ export default function ScoringExplorerPage() {
               </div>
 
               {saveMutation.isSuccess && (
-                <p className="text-xs text-green-400">Weights saved and rankings updated</p>
+                <p className="text-xs text-green-600">Weights saved and rankings updated</p>
               )}
             </CardContent>
           </Card>
@@ -287,23 +287,23 @@ export default function ScoringExplorerPage() {
             <CardContent>
               <ResponsiveContainer width="100%" height={320}>
                 <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 10 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
                   <XAxis
                     type="number"
                     dataKey="x"
                     name="Score"
                     tick={{ fontSize: 12, fill: "#94A3B8" }}
-                    stroke="rgba(255,255,255,0.06)"
-                    label={{ value: "Composite Score", position: "bottom", fontSize: 12, fill: "#64748B" }}
+                    stroke="rgba(0,0,0,0.06)"
+                    label={{ value: "Composite Score", position: "bottom", fontSize: 12, fill: "#94A3B8" }}
                   />
                   <YAxis
                     type="number"
                     dataKey="y"
                     name="ROI"
                     tick={{ fontSize: 12, fill: "#94A3B8" }}
-                    stroke="rgba(255,255,255,0.06)"
+                    stroke="rgba(0,0,0,0.06)"
                     tickFormatter={(v: number) => formatCurrency(v)}
-                    label={{ value: "Est. ROI", angle: -90, position: "insideLeft", fontSize: 12, fill: "#64748B" }}
+                    label={{ value: "Est. ROI", angle: -90, position: "insideLeft", fontSize: 12, fill: "#94A3B8" }}
                   />
                   <ZAxis type="number" dataKey="z" range={[40, 120]} />
                   <ReTooltip
@@ -357,12 +357,12 @@ export default function ScoringExplorerPage() {
 
                       <div className="w-6 flex justify-center">
                         {movement > 0 ? (
-                          <span className="flex items-center text-green-400">
+                          <span className="flex items-center text-green-600">
                             <ArrowUp size={14} />
                             <span className="text-[10px] font-semibold">{movement}</span>
                           </span>
                         ) : movement < 0 ? (
-                          <span className="flex items-center text-red-400">
+                          <span className="flex items-center text-red-600">
                             <ArrowDown size={14} />
                             <span className="text-[10px] font-semibold">{Math.abs(movement)}</span>
                           </span>

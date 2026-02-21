@@ -72,7 +72,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       {/* Logo */}
       <div className="p-5 pb-4">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-gong flex items-center justify-center shadow-glow">
+          <div className="w-8 h-8 rounded-lg bg-gradient-gong flex items-center justify-center shadow-sm">
             <Sparkles size={16} className="text-white" />
           </div>
           <div>
@@ -108,14 +108,14 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
                     className={cn(
                       "flex items-center gap-2.5 px-2.5 py-[7px] text-[13px] rounded-lg transition-all duration-200",
                       active
-                        ? "bg-gong-purple/15 text-gong-purple-light shadow-sm shadow-gong-purple-glow"
-                        : "text-text-secondary hover:bg-white/[0.04] hover:text-text-primary"
+                        ? "bg-gong-purple/10 text-gong-purple font-medium shadow-sm"
+                        : "text-text-secondary hover:bg-surface-2 hover:text-text-primary"
                     )}
                   >
-                    <Icon size={15} className={cn(active && "text-gong-purple-light")} strokeWidth={active ? 2.2 : 1.8} />
+                    <Icon size={15} className={cn(active && "text-gong-purple")} strokeWidth={active ? 2.2 : 1.8} />
                     <span className="font-body">{item.label}</span>
                     {active && (
-                      <div className="ml-auto w-1.5 h-1.5 rounded-full bg-gong-purple-light shadow-sm shadow-gong-purple-light/50" />
+                      <div className="ml-auto w-1.5 h-1.5 rounded-full bg-gong-purple" />
                     )}
                   </Link>
                 );
@@ -129,8 +129,8 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
       {/* Footer */}
       <div className="p-4 flex items-center gap-2">
-        <div className="w-6 h-6 rounded-full bg-gradient-gong-subtle flex items-center justify-center">
-          <span className="text-[10px] font-bold text-gong-purple-light">DL</span>
+        <div className="w-6 h-6 rounded-full bg-gradient-gong flex items-center justify-center">
+          <span className="text-[10px] font-bold text-white">DL</span>
         </div>
         <div>
           <p className="text-[11px] text-text-secondary font-medium">David Lai</p>
@@ -163,10 +163,10 @@ export default function Sidebar() {
   return (
     <>
       {/* Mobile top bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-40 h-14 flex items-center gap-3 px-4 bg-surface-1/90 backdrop-blur-xl border-b border-border">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 h-14 flex items-center gap-3 px-4 bg-white/90 backdrop-blur-xl border-b border-border">
         <button
           onClick={() => setOpen(true)}
-          className="w-9 h-9 flex items-center justify-center rounded-lg bg-surface-2/60 border border-border text-text-secondary hover:text-text-primary transition-colors"
+          className="w-9 h-9 flex items-center justify-center rounded-lg bg-surface-2 border border-border text-text-secondary hover:text-text-primary transition-colors"
           aria-label="Open menu"
         >
           <Menu size={18} />
@@ -184,7 +184,7 @@ export default function Sidebar() {
       {/* Mobile drawer overlay */}
       {open && (
         <div
-          className="md:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+          className="md:hidden fixed inset-0 z-50 bg-black/20 backdrop-blur-sm"
           onClick={() => setOpen(false)}
         />
       )}
@@ -192,7 +192,7 @@ export default function Sidebar() {
       {/* Mobile drawer */}
       <aside
         className={cn(
-          "md:hidden fixed top-0 left-0 z-50 h-screen w-72 flex flex-col bg-surface-1 border-r border-border transition-transform duration-300 ease-out",
+          "md:hidden fixed top-0 left-0 z-50 h-screen w-72 flex flex-col bg-white border-r border-border transition-transform duration-300 ease-out",
           open ? "translate-x-0" : "-translate-x-full"
         )}
       >
@@ -207,7 +207,7 @@ export default function Sidebar() {
       </aside>
 
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex w-64 shrink-0 flex-col h-screen bg-surface-1/80 backdrop-blur-xl border-r border-border">
+      <aside className="hidden md:flex w-64 shrink-0 flex-col h-screen bg-white border-r border-border">
         <SidebarContent />
       </aside>
     </>

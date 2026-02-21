@@ -72,15 +72,15 @@ const PIPELINE_STATUSES = [
 ];
 
 const STATUS_COLORS: Record<string, string> = {
-  proposed: "bg-slate-500/20 text-slate-400 border-slate-500/30",
-  impact_assessed: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  approved: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  in_development: "bg-amber-500/20 text-amber-400 border-amber-500/30",
-  deployed: "bg-green-500/20 text-green-400 border-green-500/30",
-  monitoring: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30",
-  under_review: "bg-orange-500/20 text-orange-400 border-orange-500/30",
-  on_hold: "bg-red-500/20 text-red-400 border-red-500/30",
-  retired: "bg-gray-500/20 text-gray-400 border-gray-500/30",
+  proposed: "bg-slate-100 text-slate-700 border-slate-200",
+  impact_assessed: "bg-blue-100 text-blue-700 border-blue-200",
+  approved: "bg-emerald-100 text-emerald-700 border-emerald-200",
+  in_development: "bg-amber-100 text-amber-700 border-amber-200",
+  deployed: "bg-green-100 text-green-700 border-green-200",
+  monitoring: "bg-cyan-100 text-cyan-700 border-cyan-200",
+  under_review: "bg-orange-100 text-orange-700 border-orange-200",
+  on_hold: "bg-red-100 text-red-700 border-red-200",
+  retired: "bg-gray-100 text-gray-500 border-gray-200",
 };
 
 const RISK_BADGE: Record<string, "green" | "yellow" | "red" | "purple"> = {
@@ -172,7 +172,7 @@ export default function LifecyclePipelinePage() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <p className="text-red-400 font-medium mb-1">Failed to load projects</p>
+          <p className="text-red-600 font-medium mb-1">Failed to load projects</p>
           <p className="text-sm text-text-muted">{(error as Error).message}</p>
         </div>
       </div>
@@ -212,7 +212,7 @@ export default function LifecyclePipelinePage() {
                 <div className="p-3 border-b border-border">
                   <div className="flex items-center justify-between gap-2">
                     <span
-                      className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium border ${STATUS_COLORS[status] || "bg-white/5 text-text-secondary border-border"}`}
+                      className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium border ${STATUS_COLORS[status] || "bg-surface-2 text-text-secondary border-border"}`}
                     >
                       {statusLabel(status)}
                     </span>
@@ -305,7 +305,7 @@ export default function LifecyclePipelinePage() {
                 <Card className="p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <span
-                      className={`inline-flex items-center rounded-md px-2.5 py-1 text-xs font-medium border ${STATUS_COLORS[detail.status] || "bg-white/5 text-text-secondary border-border"}`}
+                      className={`inline-flex items-center rounded-md px-2.5 py-1 text-xs font-medium border ${STATUS_COLORS[detail.status] || "bg-surface-2 text-text-secondary border-border"}`}
                     >
                       {statusLabel(detail.status)}
                     </span>

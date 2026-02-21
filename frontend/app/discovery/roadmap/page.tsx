@@ -78,7 +78,7 @@ interface PhaseConfig {
 const PHASE_CONFIGS: PhaseConfig[] = [
   {
     icon: Zap,
-    color: "text-green-400",
+    color: "text-green-600",
     bgColor: "bg-green-500/5",
     borderColor: "border-green-500/20",
     headerBg: "bg-green-500/10",
@@ -86,7 +86,7 @@ const PHASE_CONFIGS: PhaseConfig[] = [
   },
   {
     icon: Target,
-    color: "text-blue-400",
+    color: "text-blue-600",
     bgColor: "bg-blue-500/5",
     borderColor: "border-blue-500/20",
     headerBg: "bg-blue-500/10",
@@ -94,7 +94,7 @@ const PHASE_CONFIGS: PhaseConfig[] = [
   },
   {
     icon: Clock,
-    color: "text-purple-400",
+    color: "text-purple-600",
     bgColor: "bg-purple-500/5",
     borderColor: "border-purple-500/20",
     headerBg: "bg-purple-500/10",
@@ -121,7 +121,7 @@ export default function RoadmapPage() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <p className="text-red-400 font-medium mb-1">Failed to load roadmap</p>
+          <p className="text-red-600 font-medium mb-1">Failed to load roadmap</p>
           <p className="text-sm text-text-muted">{(error as Error).message}</p>
         </div>
       </div>
@@ -151,7 +151,7 @@ export default function RoadmapPage() {
           color="text-gong-success"
         />
         {roadmap.phases.map((phase, i) => {
-          const colors = ["text-green-400", "text-blue-400", "text-purple-400"];
+          const colors = ["text-green-600", "text-blue-600", "text-purple-600"];
           return (
             <MetricCard
               key={phase.phase}
@@ -267,7 +267,7 @@ function RoadmapCard({ item }: { item: RoadmapItem }) {
           {item.jim_principles.map((p) => (
             <span
               key={p}
-              className="inline-flex items-center gap-0.5 text-[9px] rounded px-1.5 py-0.5 bg-amber-500/10 text-amber-400"
+              className="inline-flex items-center gap-0.5 text-[9px] rounded px-1.5 py-0.5 bg-amber-500/10 text-amber-600"
             >
               <Sparkles size={8} />
               {p.replace(/_/g, " ")}

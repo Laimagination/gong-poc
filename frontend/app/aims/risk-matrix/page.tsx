@@ -53,7 +53,7 @@ const DEPT_COLORS: Record<string, string> = {
   customer_success: "#10B981",
   marketing: "#F59E0B",
   support: "#8B5CF6",
-  engineering: "#7C3AED",
+  engineering: "#235FF6",
   product: "#EF4444",
   finance: "#14B8A6",
   legal: "#F97316",
@@ -62,15 +62,15 @@ const DEPT_COLORS: Record<string, string> = {
 };
 
 const tooltipStyle = {
-  backgroundColor: "#1A1F2E",
-  border: "1px solid rgba(255,255,255,0.1)",
+  backgroundColor: "#FFFFFF",
+  border: "1px solid rgba(0,0,0,0.1)",
   borderRadius: "8px",
-  boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+  boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
   fontSize: "12px",
-  color: "#F1F5F9",
+  color: "#0F172A",
 };
 
-const axisStyle = { fontSize: 11, fill: "#64748B" };
+const axisStyle = { fontSize: 11, fill: "#94A3B8" };
 
 const RISK_BADGE_VARIANT: Record<string, "green" | "yellow" | "red" | "default"> = {
   low: "green",
@@ -307,7 +307,7 @@ export default function RiskMatrixPage() {
 
                 <ResponsiveContainer width="100%" height={420}>
                   <ScatterChart margin={{ top: 20, right: 20, bottom: 30, left: 10 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
                     <XAxis
                       type="number"
                       dataKey="x"
@@ -321,7 +321,7 @@ export default function RiskMatrixPage() {
                         position: "bottom",
                         offset: 10,
                         fontSize: 12,
-                        fill: "#64748B",
+                        fill: "#94A3B8",
                       }}
                     />
                     <YAxis
@@ -338,7 +338,7 @@ export default function RiskMatrixPage() {
                         position: "insideLeft",
                         offset: 0,
                         fontSize: 12,
-                        fill: "#64748B",
+                        fill: "#94A3B8",
                       }}
                     />
                     <ZAxis type="number" dataKey="z" range={[60, 160]} />
@@ -346,12 +346,12 @@ export default function RiskMatrixPage() {
                     {/* Reference lines creating quadrants */}
                     <ReferenceLine
                       x={5}
-                      stroke="rgba(255,255,255,0.12)"
+                      stroke="rgba(0,0,0,0.08)"
                       strokeDasharray="6 4"
                     />
                     <ReferenceLine
                       y={5}
-                      stroke="rgba(255,255,255,0.12)"
+                      stroke="rgba(0,0,0,0.08)"
                       strokeDasharray="6 4"
                     />
 
@@ -383,7 +383,7 @@ export default function RiskMatrixPage() {
                       {scatterData.map((entry, i) => (
                         <Cell
                           key={`cell-${i}`}
-                          fill={DEPT_COLORS[entry.department] ?? "#7C3AED"}
+                          fill={DEPT_COLORS[entry.department] ?? "#235FF6"}
                           fillOpacity={selectedId === entry.id ? 1 : 0.7}
                           stroke={selectedId === entry.id ? "#FFFFFF" : "transparent"}
                           strokeWidth={selectedId === entry.id ? 2 : 0}
@@ -400,7 +400,7 @@ export default function RiskMatrixPage() {
                   <div key={dept} className="flex items-center gap-1.5 text-[11px]">
                     <div
                       className="w-2.5 h-2.5 rounded-full"
-                      style={{ backgroundColor: DEPT_COLORS[dept] ?? "#7C3AED" }}
+                      style={{ backgroundColor: DEPT_COLORS[dept] ?? "#235FF6" }}
                     />
                     <span className="text-text-muted">{deptLabel(dept)}</span>
                   </div>

@@ -235,13 +235,13 @@ export default function AuditLog() {
                 </tr>
               ) : (
                 pageEntries.map((entry) => (
-                  <tr key={entry.id} className="border-b border-border hover:bg-white/[0.02] transition-colors">
+                  <tr key={entry.id} className="border-b border-border hover:bg-surface-2/60 transition-colors">
                     <td className="py-3 pr-4 whitespace-nowrap text-text-secondary">
                       {new Date(entry.timestamp).toLocaleString()}
                     </td>
                     <td className="py-3 pr-4 text-text-secondary">{entry.department}</td>
                     <td className="py-3 pr-4">
-                      <code className="text-xs bg-white/[0.06] text-text-primary rounded px-1.5 py-0.5">{entry.model}</code>
+                      <code className="text-xs bg-surface-2 text-text-primary rounded px-1.5 py-0.5">{entry.model}</code>
                     </td>
                     <td className="py-3 pr-4 text-right tabular-nums text-text-secondary">{entry.total_tokens.toLocaleString()}</td>
                     <td className="py-3 pr-4 text-right tabular-nums text-text-secondary">${entry.cost_usd.toFixed(4)}</td>
