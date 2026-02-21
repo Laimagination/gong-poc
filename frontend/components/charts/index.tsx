@@ -53,7 +53,10 @@ export function PieChartCard({ data, dataKey, nameKey = "name", height = 280 }: 
           nameKey={nameKey}
           stroke="#FFFFFF"
           strokeWidth={2}
-          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+          label={({ name, percent }) => {
+            const short = name.length > 12 ? name.slice(0, 12) + "…" : name;
+            return `${short} ${(percent * 100).toFixed(0)}%`;
+          }}
         >
           {data.map((_, i) => (
             <Cell key={i} fill={COLORS[i % COLORS.length]} />
