@@ -182,7 +182,7 @@ export default function KnowledgeGraphPage() {
           Knowledge Graph
         </h1>
         <p className="text-sm text-text-muted mt-1">
-          Cross-POC Compliance Lineage
+          Cross-Module Compliance Lineage
         </p>
       </div>
 

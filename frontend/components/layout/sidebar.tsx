@@ -57,7 +57,7 @@ const navSections = [
     ],
   },
   {
-    title: "Cross-POC",
+    title: "Intelligence",
     items: [
       { label: "Knowledge Graph", href: "/knowledge-graph", icon: Network },
     ],

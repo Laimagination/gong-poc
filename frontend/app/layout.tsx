@@ -18,7 +18,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Gong AI Operating Model",
-  description: "AI Governance, Discovery & Onboarding POC Portfolio",
+  description: "AI Operating Model — Governance, Discovery & Lifecycle Management",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

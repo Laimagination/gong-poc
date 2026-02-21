@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Shield, Search, ShieldCheck, ArrowRight, Zap, BarChart3, Globe } from "lucide-react";
 
-const pocs = [
+const modules = [
   {
     title: "AI Governance & Cost Platform",
     desc: "Multi-model routing with LiteLLM, real-time cost tracking, SLA monitoring, and ISO 42001-aligned audit logging.",
@@ -14,7 +14,7 @@ const pocs = [
       { label: "Dept Chargeback", icon: BarChart3 },
       { label: "p50/p95/p99 SLAs", icon: Zap },
     ],
-    tag: "POC 1",
+    tag: "Governance",
     tagColor: "text-gong-purple-light bg-gong-purple/10 border-gong-purple/20",
   },
   {
@@ -29,7 +29,7 @@ const pocs = [
       { label: "Weighted Scoring", icon: BarChart3 },
       { label: "90-Day Roadmap", icon: Zap },
     ],
-    tag: "POC 2",
+    tag: "Discovery",
     tagColor: "text-gong-accent-light bg-gong-accent/10 border-gong-accent/20",
   },
   {
@@ -44,7 +44,7 @@ const pocs = [
       { label: "Risk Matrix", icon: BarChart3 },
       { label: "42001 Controls", icon: Zap },
     ],
-    tag: "POC 3",
+    tag: "Lifecycle",
     tagColor: "text-gong-success bg-gong-success/10 border-gong-success/20",
   },
 ];
@@ -56,33 +56,33 @@ export default function Home() {
       <div className="mb-12 opacity-0 animate-fade-up">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface-2/60 text-[11px] text-text-muted mb-5">
           <span className="w-1.5 h-1.5 rounded-full bg-gong-success animate-pulse" />
-          Live Portfolio — David Lai
+          Live Demo — David Lai
         </div>
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold tracking-tight leading-[1.1] mb-4">
           AI Operating Model
           <br />
-          <span className="text-gradient">POC Portfolio</span>
+          <span className="text-gradient">Platform</span>
         </h1>
         <p className="text-text-secondary text-lg max-w-2xl leading-relaxed">
-          Three proof-of-concept demos spanning Strategy & Governance,
-          Discovery & Execution, and Impact Assessment & Lifecycle.
+          End-to-end AI management spanning governance & cost control,
+          opportunity discovery, and impact assessment & lifecycle management.
         </p>
       </div>
 
-      {/* POC Cards */}
+      {/* Module Cards */}
       <div className="space-y-4">
-        {pocs.map((poc, i) => {
-          const Icon = poc.icon;
+        {modules.map((mod, i) => {
+          const Icon = mod.icon;
           return (
             <Link
-              key={poc.href}
-              href={poc.href}
+              key={mod.href}
+              href={mod.href}
               className={`block group opacity-0 animate-fade-up stagger-${i + 2}`}
             >
-              <div className={`relative rounded-xl border border-border bg-surface-2/40 p-4 sm:p-6 transition-all duration-300 hover:border-border-strong ${poc.glow} hover:bg-surface-2/70`}>
+              <div className={`relative rounded-xl border border-border bg-surface-2/40 p-4 sm:p-6 transition-all duration-300 hover:border-border-strong ${mod.glow} hover:bg-surface-2/70`}>
                 <div className="flex items-start gap-3 sm:gap-5">
                   {/* Icon */}
-                  <div className={`shrink-0 w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-gradient-to-br ${poc.accent} flex items-center justify-center shadow-lg`}>
+                  <div className={`shrink-0 w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-gradient-to-br ${mod.accent} flex items-center justify-center shadow-lg`}>
                     <Icon size={18} className="text-white sm:hidden" />
                     <Icon size={20} className="text-white hidden sm:block" />
                   </div>
@@ -90,18 +90,18 @@ export default function Home() {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
-                      <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border ${poc.tagColor}`}>
-                        {poc.tag}
+                      <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border ${mod.tagColor}`}>
+                        {mod.tag}
                       </span>
                       <h2 className="text-base sm:text-lg font-display font-semibold text-text-primary group-hover:text-gong-purple transition-colors">
-                        {poc.title}
+                        {mod.title}
                       </h2>
                     </div>
-                    <p className="text-sm text-text-secondary mb-4 leading-relaxed">{poc.desc}</p>
+                    <p className="text-sm text-text-secondary mb-4 leading-relaxed">{mod.desc}</p>
 
                     {/* Metric pills */}
                     <div className="flex flex-wrap gap-2">
-                      {poc.metrics.map((m) => {
+                      {mod.metrics.map((m) => {
                         const MIcon = m.icon;
                         return (
                           <span
