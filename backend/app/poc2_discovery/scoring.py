@@ -18,6 +18,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 DATA_DIR = Path(__file__).resolve().parent / "data"
+WEIGHTS_FILE = DATA_DIR / "score_weights.json"
 
 # ---------------------------------------------------------------------------
 # Pydantic models
@@ -153,7 +154,14 @@ def _score_self_service_potential(wf: dict) -> float:
 # ---------------------------------------------------------------------------
 
 # Module-level mutable weights (can be updated via API).
-_current_weights = ScoreWeights()
+# Load persisted weights from JSON if available, otherwise use defaults.
+def _load_persisted_weights() -> ScoreWeights:
+    if WEIGHTS_FILE.exists():
+        with open(WEIGHTS_FILE, encoding="utf-8") as f:
+            return ScoreWeights(**json.load(f))
+    return ScoreWeights()
+
+_current_weights = _load_persisted_weights()
 
 
 def score_workflow(wf: dict, weights: ScoreWeights | None = None) -> ScoredWorkflow:
@@ -202,9 +210,11 @@ def rank_all(weights: ScoreWeights | None = None) -> list[ScoredWorkflow]:
 
 
 def update_weights(new_weights: ScoreWeights) -> ScoreWeights:
-    """Update the module-level scoring weights and return them."""
+    """Update the module-level scoring weights, persist to JSON, and return them."""
     global _current_weights
     _current_weights = new_weights
+    with open(WEIGHTS_FILE, "w", encoding="utf-8") as f:
+        json.dump(new_weights.model_dump(), f, indent=2)
     return _current_weights
 
 

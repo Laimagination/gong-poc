@@ -128,6 +128,24 @@ export default function ScoringExplorerPage() {
     }
   }, [data?.weights]);
 
+  // Client-side re-ranking: recompute composite scores and re-sort whenever weights change
+  const rankedWorkflows = useMemo(() => {
+    if (!workflows.length) return [];
+    return workflows
+      .map((wf) => {
+        const composite = parseFloat(
+          (
+            weights.revenue_impact * wf.scores.revenue_impact +
+            weights.headcount_pressure * wf.scores.headcount_pressure +
+            weights.implementation_complexity * wf.scores.implementation_complexity +
+            weights.self_service_potential * wf.scores.self_service_potential
+          ).toFixed(2)
+        );
+        return { ...wf, scores: { ...wf.scores, composite } };
+      })
+      .sort((a, b) => b.scores.composite - a.scores.composite);
+  }, [workflows, weights]);
+
   const saveMutation = useMutation({
     mutationFn: (w: Weights) =>
       apiFetch("/discovery/score-weights", {
@@ -135,9 +153,9 @@ export default function ScoringExplorerPage() {
         body: JSON.stringify(w),
       }),
     onSuccess: () => {
-      // Save previous ranking before refetch
+      // Snapshot current live ranking as the baseline for movement arrows
       const ranking = new Map<string, number>();
-      workflows.forEach((o, i) => ranking.set(o.id, i));
+      rankedWorkflows.forEach((o, i) => ranking.set(o.id, i));
       setPrevRanking(ranking);
       queryClient.invalidateQueries({ queryKey: ["discovery-workflows"] });
       queryClient.invalidateQueries({ queryKey: ["discovery-backlog"] });
@@ -153,10 +171,10 @@ export default function ScoringExplorerPage() {
 
   const handleReset = useCallback(() => {
     const ranking = new Map<string, number>();
-    workflows.forEach((o, i) => ranking.set(o.id, i));
+    rankedWorkflows.forEach((o, i) => ranking.set(o.id, i));
     setPrevRanking(ranking);
     setWeights(DEFAULT_WEIGHTS);
-  }, [workflows]);
+  }, [rankedWorkflows]);
 
   const totalWeight = Object.values(weights).reduce((s, v) => s + v, 0);
 
@@ -165,14 +183,14 @@ export default function ScoringExplorerPage() {
   }, [workflows]);
 
   const scatterData = useMemo(() => {
-    return workflows.map((o) => ({
+    return rankedWorkflows.map((o) => ({
       x: o.scores.composite,
       y: o.annual_cost_savings_usd,
       name: o.name,
       department: o.department,
       z: 80,
     }));
-  }, [workflows]);
+  }, [rankedWorkflows]);
 
   if (isLoading && !workflows.length) {
     return (
@@ -335,13 +353,13 @@ export default function ScoringExplorerPage() {
               <CardTitle className="text-base">
                 Live Ranking
                 <span className="text-xs font-normal text-text-muted ml-2">
-                  {workflows.length} opportunities
+                  {rankedWorkflows.length} opportunities
                 </span>
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {workflows.map((wf, idx) => {
+                {rankedWorkflows.map((wf, idx) => {
                   const prevIdx = prevRanking.get(wf.id);
                   const movement = prevIdx !== undefined ? prevIdx - idx : 0;
                   const effort = effortFromHours(wf.estimated_build_hours);
