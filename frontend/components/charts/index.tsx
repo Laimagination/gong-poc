@@ -53,9 +53,35 @@ export function PieChartCard({ data, dataKey, nameKey = "name", height = 280 }: 
           nameKey={nameKey}
           stroke="#FFFFFF"
           strokeWidth={2}
-          label={({ name, percent }) => {
-            const short = name.length > 12 ? name.slice(0, 12) + "…" : name;
-            return `${short} ${(percent * 100).toFixed(0)}%`;
+          paddingAngle={2}
+          label={({ cx, cy, midAngle, outerRadius: oR, name, percent }) => {
+            const RADIAN = Math.PI / 180;
+            const radius = oR + 18;
+            const x = cx + radius * Math.cos(-midAngle * RADIAN);
+            const y = cy + radius * Math.sin(-midAngle * RADIAN);
+            const anchor = x > cx ? "start" : "end";
+            const pctText = `${(percent * 100).toFixed(0)}%`;
+            // Split name into chunks of ~14 chars at word/separator boundaries
+            const chunks: string[] = [];
+            let remaining = name;
+            while (remaining.length > 14) {
+              let split = remaining.lastIndexOf("-", 14);
+              if (split <= 0) split = remaining.lastIndexOf("/", 14);
+              if (split <= 0) split = remaining.lastIndexOf(" ", 14);
+              if (split <= 0) split = 14;
+              else split += 1;
+              chunks.push(remaining.slice(0, split));
+              remaining = remaining.slice(split);
+            }
+            chunks.push(remaining);
+            return (
+              <text x={x} y={y} textAnchor={anchor} fill="#64748B" fontSize={10}>
+                {chunks.map((line, i) => (
+                  <tspan key={i} x={x} dy={i === 0 ? 0 : 12}>{line}</tspan>
+                ))}
+                <tspan x={x} dy={12} fontWeight={600}>{pctText}</tspan>
+              </text>
+            );
           }}
         >
           {data.map((_, i) => (
