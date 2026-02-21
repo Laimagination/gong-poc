@@ -10,6 +10,8 @@ async def lifespan(app: FastAPI):
     # Seed data on first run
     from .poc1_governance.seed import seed_if_empty
     await seed_if_empty()
+    from .poc3_aims.seed import seed_if_empty as seed_aims
+    await seed_aims()
     yield
 
 
@@ -25,11 +27,11 @@ app.add_middleware(
 
 from .poc1_governance.routes import router as governance_router
 from .poc2_discovery.routes import router as discovery_router
-from .poc3_onboarding.routes import router as onboarding_router
+from .poc3_aims.routes import router as aims_router
 
 app.include_router(governance_router, prefix="/api/governance", tags=["governance"])
 app.include_router(discovery_router, prefix="/api/discovery", tags=["discovery"])
-app.include_router(onboarding_router, prefix="/api/onboarding", tags=["onboarding"])
+app.include_router(aims_router, prefix="/api/aims", tags=["aims"])
 
 
 @app.get("/api/health")

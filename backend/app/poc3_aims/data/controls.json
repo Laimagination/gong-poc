@@ -1,0 +1,17 @@
+[
+  {"id": "A.6.2.2", "name": "AI Risk Assessment", "category": "Risk", "description": "Assessment of risks to individuals and groups affected by AI system"},
+  {"id": "A.6.2.4", "name": "AI Risk Treatment", "category": "Risk", "description": "Documentation and implementation of AI risk treatment decisions"},
+  {"id": "A.6.2.6", "name": "Residual Risk Acceptance", "category": "Risk", "description": "Formal acceptance of residual AI risks by authorized personnel"},
+  {"id": "A.7.3", "name": "AI System Impact Assessment", "category": "Impact", "description": "Assessment of potential impacts of AI system on individuals, groups, and society"},
+  {"id": "A.7.4", "name": "Documentation of Impact Assessment", "category": "Impact", "description": "Recording and maintaining impact assessment results and decisions"},
+  {"id": "A.8.2", "name": "Data Quality for AI", "category": "Data", "description": "Ensuring data used for AI development and operation meets quality requirements"},
+  {"id": "A.8.4", "name": "AI System Transparency", "category": "Transparency", "description": "Providing appropriate transparency about AI system capabilities and limitations"},
+  {"id": "A.8.5", "name": "AI Explainability", "category": "Transparency", "description": "Enabling explanation of AI system outputs and decision-making processes"},
+  {"id": "A.9.3", "name": "Third-Party AI Risk", "category": "Risk", "description": "Managing risks from third-party AI components, services, and data"},
+  {"id": "A.9.4", "name": "AI Supply Chain", "category": "Risk", "description": "Ensuring AI supply chain integrity and security"},
+  {"id": "A.10.2", "name": "Monitoring of AI Systems", "category": "Operations", "description": "Continuous monitoring of AI system performance and compliance"},
+  {"id": "A.10.3", "name": "AI System Logging", "category": "Operations", "description": "Maintaining comprehensive logs of AI system operations and decisions"},
+  {"id": "A.10.4", "name": "AI Incident Management", "category": "Operations", "description": "Procedures for managing AI-related incidents and near-misses"},
+  {"id": "A.10.5", "name": "AI System Change Management", "category": "Operations", "description": "Controlled processes for changes to AI systems"},
+  {"id": "A.10.6", "name": "AI Performance Evaluation", "category": "Operations", "description": "Regular evaluation of AI system performance against objectives"}
+]

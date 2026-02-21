@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Shield, Search, Users, ArrowRight, Zap, BarChart3, Globe } from "lucide-react";
+import { Shield, Search, ShieldCheck, ArrowRight, Zap, BarChart3, Globe } from "lucide-react";
 
 const pocs = [
   {
@@ -33,16 +33,16 @@ const pocs = [
     tagColor: "text-gong-accent-light bg-gong-accent/10 border-gong-accent/20",
   },
   {
-    title: "AI Onboarding Orchestrator",
-    desc: "LangGraph-powered multi-agent workflow for employee onboarding with real-time progress tracking via WebSocket.",
-    href: "/onboarding",
-    icon: Users,
+    title: "AI Impact Assessment & Lifecycle",
+    desc: "ISO 42005-aligned impact assessment and lifecycle management for all 40 automation opportunities with risk scoring and compliance controls.",
+    href: "/aims",
+    icon: ShieldCheck,
     accent: "from-gong-success to-emerald-700",
     glow: "group-hover:shadow-[0_0_20px_rgba(16,185,129,0.15)]",
     metrics: [
-      { label: "5 AI Agents", icon: Globe },
-      { label: "Live WebSocket", icon: Zap },
-      { label: "Mock Enterprise APIs", icon: BarChart3 },
+      { label: "ISO 42005 Aligned", icon: Globe },
+      { label: "Risk Matrix", icon: BarChart3 },
+      { label: "42001 Controls", icon: Zap },
     ],
     tag: "POC 3",
     tagColor: "text-gong-success bg-gong-success/10 border-gong-success/20",
@@ -65,7 +65,7 @@ export default function Home() {
         </h1>
         <p className="text-text-secondary text-lg max-w-2xl leading-relaxed">
           Three proof-of-concept demos spanning Strategy & Governance,
-          Discovery & Execution, and Onboarding Operations.
+          Discovery & Execution, and Impact Assessment & Lifecycle.
         </p>
       </div>
 

@@ -24,18 +24,49 @@ class AIRequest(Base):
     error_message = Column(Text, nullable=True)
 
 
-class OnboardingWorkflow(Base):
-    """Tracks onboarding workflow instances."""
-    __tablename__ = "onboarding_workflows"
+class AIProject(Base):
+    """Tracks an AI automation project through the AIMS lifecycle."""
+    __tablename__ = "ai_projects"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    created_at = Column(DateTime, server_default=func.now())
+    workflow_id = Column(String(20), index=True)        # Links to POC 2 wf-001..wf-040
+    name = Column(String(200))
+    department = Column(String(100), index=True)
+    status = Column(String(30), index=True, default="proposed")
+    risk_level = Column(String(20), default="medium")    # low, medium, high, critical
+
+    # ISO 42005 Impact Assessment scores (0-10)
+    impact_stakeholder = Column(Float, default=0.0)
+    impact_ethical = Column(Float, default=0.0)
+    impact_legal = Column(Float, default=0.0)
+    impact_operational = Column(Float, default=0.0)
+    risk_score = Column(Float, default=0.0)
+    benefit_score = Column(Float, default=0.0)
+
+    # Approval tracking
+    approved_by = Column(JSON, default=list)
+    approval_date = Column(DateTime, nullable=True)
+
+    # Lifecycle metadata
+    owner = Column(String(100))
+    review_due = Column(DateTime, nullable=True)
+    last_reviewed = Column(DateTime, nullable=True)
+    controls = Column(JSON, default=list)
+    notes = Column(Text, nullable=True)
+
+    created_at = Column(DateTime, server_default=func.now(), index=True)
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
-    new_hire_name = Column(String(200))
-    department = Column(String(100))
-    role = Column(String(200))
-    start_date = Column(String(20))
-    status = Column(String(20), default="pending")  # pending, running, completed, failed
-    progress_pct = Column(Float, default=0.0)
-    steps = Column(JSON, default=list)
-    current_step = Column(String(100), nullable=True)
+
+
+class AIMSEvent(Base):
+    """Audit trail for every lifecycle action on an AI project."""
+    __tablename__ = "aims_events"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    project_id = Column(Integer, index=True)
+    timestamp = Column(DateTime, server_default=func.now(), index=True)
+    event_type = Column(String(50))      # status_change, assessment, approval, review, incident
+    from_status = Column(String(30), nullable=True)
+    to_status = Column(String(30), nullable=True)
+    actor = Column(String(100))
+    detail = Column(Text, nullable=True)
