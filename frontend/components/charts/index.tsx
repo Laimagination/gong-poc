@@ -71,9 +71,21 @@ export function PieChartCard({ data, dataKey, nameKey = "name", height = 280 }: 
 export function LineChartCard({ data, lines, height = 280 }: ChartProps & { lines: { key: string; color?: string }[] }) {
   return (
     <ResponsiveContainer width="100%" height={height}>
-      <ReLineChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -10 }}>
+      <ReLineChart data={data} margin={{ top: 4, right: 4, bottom: 30, left: -10 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" vertical={false} />
-        <XAxis dataKey="name" tick={axisStyle} axisLine={false} tickLine={false} />
+        <XAxis
+          dataKey="name"
+          tick={axisStyle}
+          axisLine={false}
+          tickLine={false}
+          interval="preserveStartEnd"
+          angle={-35}
+          textAnchor="end"
+          tickFormatter={(v: string) => {
+            const d = new Date(v + "T00:00:00");
+            return isNaN(d.getTime()) ? v : d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+          }}
+        />
         <YAxis tick={axisStyle} axisLine={false} tickLine={false} />
         <Tooltip contentStyle={tooltipStyle} />
         <Legend wrapperStyle={{ fontSize: "11px", color: "#475569" }} />
