@@ -46,9 +46,9 @@ export function PieChartCard({ data, dataKey, nameKey = "name", height = 280 }: 
         <Pie
           data={data}
           cx="50%"
-          cy="50%"
-          outerRadius={95}
-          innerRadius={50}
+          cy="45%"
+          outerRadius={75}
+          innerRadius={40}
           dataKey={dataKey}
           nameKey={nameKey}
           stroke="#FFFFFF"
