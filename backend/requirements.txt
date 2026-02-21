@@ -14,3 +14,4 @@ python-dotenv>=1.0.1
 httpx>=0.28.0
 numpy>=2.0.0
 websockets>=14.0
+neo4j>=5.0.0

@@ -384,6 +384,13 @@ async def transition_project(
     await db.commit()
     await db.refresh(p)
 
+    # Incremental graph sync (non-fatal)
+    try:
+        from ..graph.sync import sync_project
+        await sync_project(project_id)
+    except Exception:
+        pass
+
     # Re-fetch events for response
     events_result = await db.execute(
         select(AIMSEvent)

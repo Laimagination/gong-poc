@@ -17,6 +17,7 @@ import {
   Grid3X3,
   GitBranch,
   ListChecks,
+  Network,
   Sparkles,
   Menu,
   X,
@@ -53,6 +54,12 @@ const navSections = [
       { label: "Risk Matrix", href: "/aims/risk-matrix", icon: Grid3X3 },
       { label: "Lifecycle", href: "/aims/lifecycle", icon: GitBranch },
       { label: "Controls", href: "/aims/controls", icon: ListChecks },
+    ],
+  },
+  {
+    title: "Cross-POC",
+    items: [
+      { label: "Knowledge Graph", href: "/knowledge-graph", icon: Network },
     ],
   },
 ];

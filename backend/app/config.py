@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
     google_api_key: str = ""
     database_url: str = "sqlite+aiosqlite:///./data/gong_poc.db"
+    neo4j_uri: str = "bolt://localhost:7687"
+    neo4j_user: str = "neo4j"
+    neo4j_password: str = "changeme"
 
     model_config = {"env_file": ".env", "extra": "ignore"}
 
