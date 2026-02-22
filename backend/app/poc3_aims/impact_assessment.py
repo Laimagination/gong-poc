@@ -140,7 +140,9 @@ def compute_risk(wf: dict) -> dict:
     else:
         level = "critical"
 
-    controls = _assign_controls(s, e, l, o)
+    # Low-risk projects are still in triage — no controls assigned yet.
+    # Medium-and-above have been through governance review.
+    controls = [] if level == "low" else _assign_controls(s, e, l, o)
 
     return {
         "impact_stakeholder": s,
@@ -154,18 +156,7 @@ def compute_risk(wf: dict) -> dict:
 
 
 def _assign_controls(stakeholder: float, ethical: float, legal: float, operational: float) -> list[str]:
-    """Auto-assign ISO 42001 controls based on risk profile.
-
-    Low-risk projects (composite < 3.5) are not yet governed — they are
-    still in triage and have no controls assigned, which is realistic for
-    early-stage or low-impact proposals.
-    """
-    composite = (
-        0.30 * stakeholder + 0.28 * ethical + 0.22 * legal + 0.20 * operational
-    )
-    if composite < 3.5:
-        return []
-
+    """Auto-assign 3-6 ISO 42001 controls based on risk profile."""
     controls_data = _load_controls()
     by_cat: dict[str, list[str]] = {}
     for c in controls_data:
