@@ -99,12 +99,25 @@ def _compute_cost(model: str, input_tokens: int, output_tokens: int) -> float:
 
 
 async def seed_if_empty():
-    """Generate seed data if the ai_requests table is empty."""
+    """Generate seed data if the ai_requests table is empty or has stale model names."""
     async with async_session() as db:
         count_result = await db.execute(select(func.count(AIRequest.id)))
         count = count_result.scalar() or 0
+
         if count > 0:
-            return  # Already seeded
+            # Check if existing data uses current model names
+            distinct_models = await db.execute(
+                select(AIRequest.model).distinct()
+            )
+            db_models = {row[0] for row in distinct_models}
+            expected_models = set(MODELS.keys())
+            if db_models == expected_models:
+                return  # Already seeded with current models
+
+            # Stale model names — delete and reseed
+            from sqlalchemy import delete
+            await db.execute(delete(AIRequest))
+            await db.flush()
 
         records = _generate_records()
         db.add_all(records)
