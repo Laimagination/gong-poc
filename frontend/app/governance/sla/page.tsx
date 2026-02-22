@@ -107,14 +107,16 @@ export default function SLADashboard() {
       </div>
 
       {/* Global Latency Gauges */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <LatencyGauge label="P50 Latency" value={d.latency.p50_ms} threshold={500} />
         <LatencyGauge label="P95 Latency" value={d.latency.p95_ms} threshold={d.thresholds.p95_latency_ms} />
         <LatencyGauge label="P99 Latency" value={d.latency.p99_ms} threshold={d.thresholds.p99_latency_ms} />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <MetricCard
           label="Error Rate"
           value={`${d.error_rate_pct.toFixed(2)}%`}
-          sub={`${d.error_count} errors / ${d.total_requests} requests`}
+          sub={`${d.error_count} errors / ${d.total_requests.toLocaleString()} requests`}
           color={d.error_rate_pct > 1 ? "text-gong-danger" : "text-gong-success"}
         />
         <MetricCard

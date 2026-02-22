@@ -156,10 +156,10 @@ export function AreaChartCard({ data, dataKey, height = 280, color = "#235FF6" }
 
 export function MetricCard({ label, value, sub, color = "text-text-primary" }: { label: string; value: string; sub?: string; color?: string }) {
   return (
-    <div className="rounded-xl border border-border bg-white p-5 transition-all duration-300 hover:border-border-strong hover:shadow-card group">
-      <p className="text-[11px] uppercase tracking-wider text-text-muted font-semibold mb-2 font-body">{label}</p>
-      <p className={`text-2xl font-bold font-display tracking-tight ${color}`}>{value}</p>
-      {sub && <p className="text-xs text-text-muted mt-1.5">{sub}</p>}
+    <div className="rounded-xl border border-border bg-white p-5 transition-all duration-300 hover:border-border-strong hover:shadow-card group overflow-hidden">
+      <p className="text-[11px] uppercase tracking-wider text-text-muted font-semibold mb-2 font-body truncate">{label}</p>
+      <p className={`text-2xl font-bold font-display tracking-tight ${color} truncate`}>{value}</p>
+      {sub && <p className="text-xs text-text-muted mt-1.5 truncate">{sub}</p>}
     </div>
   );
 }
