@@ -356,9 +356,10 @@ async def full_sync() -> None:
         )
 
         # Control -[PART_OF]-> ControlFramework
-        # Some operational controls are internal-only and not yet mapped to the
-        # ISO 42001 framework, creating a realistic compliance chain gap.
-        _INTERNAL_ONLY_CONTROLS = {"A.10.4", "A.10.5", "A.10.6"}
+        # Some controls are internal-only and not yet mapped to the ISO 42001
+        # framework, creating a realistic compliance chain gap.  A.7.3/A.7.4
+        # (impact controls) and A.10.4-6 (ops controls) are pending mapping.
+        _INTERNAL_ONLY_CONTROLS = {"A.7.3", "A.7.4", "A.10.4", "A.10.5", "A.10.6"}
         fw_gid = f"ControlFramework-{FRAMEWORK['id']}"
         po_batch = [
             {"ctrl_gid": f"Control-{c['id']}", "fw_gid": fw_gid}
