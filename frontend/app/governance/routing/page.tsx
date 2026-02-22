@@ -38,23 +38,44 @@ function Spinner({ size = "h-5 w-5" }: { size?: string }) {
   );
 }
 
-function ResponsePanel({ result, tier }: { result: ChatResponse; tier: Tier }) {
+function ResponsePanel({ result, tier, compact = false }: { result: ChatResponse; tier: Tier; compact?: boolean }) {
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-base">Response</CardTitle>
+      <CardHeader className="flex flex-row items-center justify-between pb-3">
+        <CardTitle className="text-base">{compact ? tier.charAt(0).toUpperCase() + tier.slice(1) : "Response"}</CardTitle>
         <Badge variant={tier === "simple" ? "green" : tier === "moderate" ? "yellow" : "purple"}>
           {tier}
         </Badge>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <MetricCard label="Model" value={result.model} color={TIER_COLORS[tier]} />
-          <MetricCard label="Tokens" value={result.tokens.total.toLocaleString()} />
-          <MetricCard label="Cost" value={`$${result.cost_usd.toFixed(4)}`} color="text-gong-warning" />
-          <MetricCard label="Latency" value={`${result.latency_ms}ms`} color="text-gong-accent" />
-        </div>
-        <div className="rounded-lg bg-surface-2/60 border border-border p-4 text-sm text-text-primary whitespace-pre-wrap">
+      <CardContent className="space-y-3">
+        {compact ? (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-text-muted">Model</span>
+              <span className={`font-medium ${TIER_COLORS[tier]} truncate ml-2`}>{result.model}</span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-text-muted">Tokens</span>
+              <span className="font-medium text-text-primary">{result.tokens.total.toLocaleString()}</span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-text-muted">Cost</span>
+              <span className="font-medium text-gong-warning">${result.cost_usd.toFixed(4)}</span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-text-muted">Latency</span>
+              <span className="font-medium text-gong-accent">{result.latency_ms}ms</span>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <MetricCard label="Model" value={result.model} color={TIER_COLORS[tier]} />
+            <MetricCard label="Tokens" value={result.tokens.total.toLocaleString()} />
+            <MetricCard label="Cost" value={`$${result.cost_usd.toFixed(4)}`} color="text-gong-warning" />
+            <MetricCard label="Latency" value={`${result.latency_ms}ms`} color="text-gong-accent" />
+          </div>
+        )}
+        <div className={`rounded-lg bg-surface-2/60 border border-border p-3 text-sm text-text-primary whitespace-pre-wrap ${compact ? "max-h-60 overflow-auto" : ""}`}>
           {result.response}
         </div>
       </CardContent>
@@ -65,7 +86,7 @@ function ResponsePanel({ result, tier }: { result: ChatResponse; tier: Tier }) {
 export default function RoutingPlayground() {
   const [prompt, setPrompt] = useState("");
   const [tier, setTier] = useState<Tier>("moderate");
-  const [compareMode, setCompareMode] = useState(false);
+  const [compareMode, setCompareMode] = useState(true);
 
   const singleMutation = useMutation<ChatResponse, Error, { prompt: string; task_tier: Tier }>({
     mutationFn: (body) =>
@@ -144,15 +165,15 @@ export default function RoutingPlayground() {
                 ))}
               </div>
             )}
-            <label className="flex items-center gap-2 text-sm text-text-secondary ml-auto cursor-pointer">
-              <input
-                type="checkbox"
-                checked={compareMode}
-                onChange={(e) => setCompareMode(e.target.checked)}
-                className="rounded border-border bg-surface-3 text-gong-purple focus:ring-gong-purple"
-              />
-              Compare all tiers
-            </label>
+            <button
+              onClick={() => setCompareMode(!compareMode)}
+              className="flex items-center gap-2.5 ml-auto text-sm text-text-secondary cursor-pointer"
+            >
+              <span>Compare all tiers</span>
+              <div className={`relative w-10 h-[22px] rounded-full transition-colors ${compareMode ? "bg-gong-purple" : "bg-surface-3 border border-border"}`}>
+                <div className={`absolute top-[3px] h-4 w-4 rounded-full bg-white shadow transition-transform ${compareMode ? "translate-x-[22px]" : "translate-x-[3px]"}`} />
+              </div>
+            </button>
           </div>
 
           {/* Selected tier description */}
@@ -215,7 +236,7 @@ export default function RoutingPlayground() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {(["simple", "moderate", "complex"] as Tier[]).map((t) =>
             compareResults[t] ? (
-              <ResponsePanel key={t} result={compareResults[t]!} tier={t} />
+              <ResponsePanel key={t} result={compareResults[t]!} tier={t} compact />
             ) : (
               <Card key={t} className="opacity-50">
                 <CardHeader>
