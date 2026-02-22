@@ -181,13 +181,14 @@ async def get_graph_insights() -> dict:
             "ungoverned_projects": ungoverned_names,
         }
 
-        # 2. Compliance Chain — projects fully linked to a ControlFramework
+        # 2. Compliance Chain — projects where ALL controls map to a framework
         result = await session.run(
             "MATCH (p:AIProject) "
-            "OPTIONAL MATCH (p)-[:GOVERNED_BY]->(c:Control)-[:PART_OF]->(f:ControlFramework) "
-            "WITH p, count(f) AS framework_count "
+            "OPTIONAL MATCH (p)-[:GOVERNED_BY]->(c:Control) "
+            "WITH p, count(c) AS total_ctrls, "
+            "     sum(CASE WHEN exists((c)-[:PART_OF]->(:ControlFramework)) THEN 1 ELSE 0 END) AS linked_ctrls "
             "RETURN count(p) AS total, "
-            "       sum(CASE WHEN framework_count > 0 THEN 1 ELSE 0 END) AS fully_linked"
+            "       sum(CASE WHEN total_ctrls > 0 AND total_ctrls = linked_ctrls THEN 1 ELSE 0 END) AS fully_linked"
         )
         rec = await result.single()
         total = rec["total"] if rec else 0
