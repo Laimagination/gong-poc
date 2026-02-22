@@ -356,13 +356,15 @@ async def full_sync() -> None:
         )
 
         # Control -[PART_OF]-> ControlFramework
-        # Risk/impact controls are internal-only and not yet mapped to the
-        # ISO 42001 framework.  Projects governed only by these show as
-        # "governed" but not "framework-linked", creating a realistic gap.
+        # Risk, impact, and operational controls are internal-only and not
+        # yet mapped to the ISO 42001 framework.  Only ethical/transparency
+        # (A.8.x) and legal/third-party (A.6.2.6, A.9.x) controls are
+        # framework-linked, so projects without those show as "governed"
+        # but not "framework-linked".
         _INTERNAL_ONLY_CONTROLS = {
-            "A.6.2.2", "A.6.2.4",          # risk assessment controls
-            "A.7.3", "A.7.4",              # impact controls
-            "A.10.4", "A.10.5", "A.10.6",  # advanced ops controls
+            "A.6.2.2", "A.6.2.4",                          # risk assessment
+            "A.7.3", "A.7.4",                              # impact
+            "A.10.2", "A.10.3", "A.10.4", "A.10.5", "A.10.6",  # operations
         }
         fw_gid = f"ControlFramework-{FRAMEWORK['id']}"
         po_batch = [
