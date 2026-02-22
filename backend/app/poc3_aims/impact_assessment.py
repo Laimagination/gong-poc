@@ -156,12 +156,14 @@ def compute_risk(wf: dict) -> dict:
 def _assign_controls(stakeholder: float, ethical: float, legal: float, operational: float) -> list[str]:
     """Auto-assign ISO 42001 controls based on risk profile.
 
-    Low-risk projects (all dimensions < 3) are not yet governed — they are
+    Low-risk projects (composite < 3.5) are not yet governed — they are
     still in triage and have no controls assigned, which is realistic for
     early-stage or low-impact proposals.
     """
-    # Low-risk projects haven't gone through governance review yet
-    if stakeholder < 3 and ethical < 3 and legal < 3 and operational < 3:
+    composite = (
+        0.30 * stakeholder + 0.28 * ethical + 0.22 * legal + 0.20 * operational
+    )
+    if composite < 3.5:
         return []
 
     controls_data = _load_controls()
