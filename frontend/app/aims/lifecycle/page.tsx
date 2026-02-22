@@ -107,7 +107,9 @@ function statusLabel(s: string): string {
   return s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+const ACRONYMS = new Set(["it", "hr", "qa"]);
 function deptLabel(id: string): string {
+  if (ACRONYMS.has(id.toLowerCase())) return id.toUpperCase();
   return id.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 

@@ -46,7 +46,9 @@ const CATEGORY_BADGE: Record<string, "red" | "yellow" | "cyan" | "purple" | "gre
 type SortKey = "id" | "name" | "category" | "project_count" | "coverage";
 type SortDir = "asc" | "desc";
 
+const ACRONYMS = new Set(["it", "hr", "qa"]);
 function deptLabel(id: string): string {
+  if (ACRONYMS.has(id.toLowerCase())) return id.toUpperCase();
   return id.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
