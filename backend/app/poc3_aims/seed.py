@@ -246,8 +246,17 @@ async def seed_if_empty():
             )
             db_levels = {row[0] for row in distinct_levels}
             expected_levels = {"low", "medium", "high", "critical"}
-            if db_levels == expected_levels:
-                return  # Already seeded with current risk model
+
+            # Check that governance gap exists (some projects with empty controls)
+            ungoverned = await db.execute(
+                select(func.count(AIProject.id)).where(
+                    (AIProject.controls == None) | (AIProject.controls == [])  # noqa: E711
+                )
+            )
+            has_governance_gap = (ungoverned.scalar() or 0) > 0
+
+            if db_levels == expected_levels and has_governance_gap:
+                return  # Already seeded with current model
 
             # Stale risk data — delete and reseed
             from sqlalchemy import delete

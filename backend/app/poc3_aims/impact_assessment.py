@@ -154,7 +154,16 @@ def compute_risk(wf: dict) -> dict:
 
 
 def _assign_controls(stakeholder: float, ethical: float, legal: float, operational: float) -> list[str]:
-    """Auto-assign 3-6 ISO 42001 controls based on risk profile."""
+    """Auto-assign ISO 42001 controls based on risk profile.
+
+    Low-risk projects (all dimensions < 3) are not yet governed — they are
+    still in triage and have no controls assigned, which is realistic for
+    early-stage or low-impact proposals.
+    """
+    # Low-risk projects haven't gone through governance review yet
+    if stakeholder < 3 and ethical < 3 and legal < 3 and operational < 3:
+        return []
+
     controls_data = _load_controls()
     by_cat: dict[str, list[str]] = {}
     for c in controls_data:
@@ -162,7 +171,7 @@ def _assign_controls(stakeholder: float, ethical: float, legal: float, operation
 
     assigned: list[str] = []
 
-    # Always include base risk assessment
+    # Always include base risk assessment for governed projects
     assigned.append("A.6.2.2")
 
     # High stakeholder -> risk + impact controls

@@ -356,10 +356,14 @@ async def full_sync() -> None:
         )
 
         # Control -[PART_OF]-> ControlFramework
+        # Some operational controls are internal-only and not yet mapped to the
+        # ISO 42001 framework, creating a realistic compliance chain gap.
+        _INTERNAL_ONLY_CONTROLS = {"A.10.4", "A.10.5", "A.10.6"}
         fw_gid = f"ControlFramework-{FRAMEWORK['id']}"
         po_batch = [
             {"ctrl_gid": f"Control-{c['id']}", "fw_gid": fw_gid}
             for c in controls
+            if c["id"] not in _INTERNAL_ONLY_CONTROLS
         ]
         await session.run(
             "UNWIND $batch AS row "
