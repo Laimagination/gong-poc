@@ -259,6 +259,100 @@ async def get_graph_insights() -> dict:
             })
         insights["lifecycle_pipeline"] = pipeline
 
+        # 6. Tool Cascade Risk — Tool ← Workflow → AIProject → Department (3 hops)
+        result = await session.run(
+            "MATCH (t:Tool)<-[:USES_TOOL]-(w:Workflow)-[:BECAME_PROJECT]->(p:AIProject)-[:BELONGS_TO]->(d:Department) "
+            "WITH t.name AS tool, count(DISTINCT p) AS project_count, count(DISTINCT d) AS department_count, "
+            "     sum(CASE WHEN p.risk_level IN ['high','critical'] THEN 1 ELSE 0 END) AS high_risk_count, "
+            "     collect(DISTINCT d.name) AS departments "
+            "RETURN tool, project_count, department_count, high_risk_count, departments "
+            "ORDER BY high_risk_count DESC, department_count DESC"
+        )
+        tool_cascade = []
+        async for record in result:
+            tool_cascade.append({
+                "tool": record["tool"],
+                "project_count": record["project_count"],
+                "department_count": record["department_count"],
+                "high_risk_count": record["high_risk_count"],
+                "departments": [d for d in record["departments"] if d is not None],
+            })
+        insights["tool_cascade_risk"] = tool_cascade
+
+        # 7. Compliance-Coupled Departments — Dept ← AIProject → Control ← AIProject → Dept (4 hops)
+        result = await session.run(
+            "MATCH (d1:Department)<-[:BELONGS_TO]-(p1:AIProject)-[:GOVERNED_BY]->(c:Control)<-[:GOVERNED_BY]-(p2:AIProject)-[:BELONGS_TO]->(d2:Department) "
+            "WHERE id(d1) < id(d2) "
+            "WITH d1.name AS dept_a, d2.name AS dept_b, count(DISTINCT c) AS shared_controls, collect(DISTINCT c.name) AS control_names "
+            "RETURN dept_a, dept_b, shared_controls, control_names "
+            "ORDER BY shared_controls DESC"
+        )
+        compliance_coupled = []
+        async for record in result:
+            compliance_coupled.append({
+                "dept_a": record["dept_a"],
+                "dept_b": record["dept_b"],
+                "shared_controls": record["shared_controls"],
+                "control_names": list(record["control_names"]),
+            })
+        insights["compliance_coupled"] = compliance_coupled
+
+        # 8. Principle-to-Risk Correlation — Principle ← Workflow → AIProject (3 hops)
+        result = await session.run(
+            "MATCH (pr:Principle)<-[:FOLLOWS_PRINCIPLE]-(w:Workflow)-[:BECAME_PROJECT]->(p:AIProject) "
+            "WITH pr.name AS principle, count(DISTINCT p) AS project_count, "
+            "     round(avg(p.risk_score)*100)/100 AS avg_risk_score, round(avg(p.benefit_score)*100)/100 AS avg_benefit_score "
+            "RETURN principle, project_count, avg_risk_score, avg_benefit_score "
+            "ORDER BY avg_risk_score ASC"
+        )
+        principle_risk = []
+        async for record in result:
+            principle_risk.append({
+                "principle": record["principle"],
+                "project_count": record["project_count"],
+                "avg_risk_score": record["avg_risk_score"],
+                "avg_benefit_score": record["avg_benefit_score"],
+            })
+        insights["principle_risk"] = principle_risk
+
+        # 9. Control Reuse Hotspots — Control ← AIProject → Department (2+ hops)
+        result = await session.run(
+            "MATCH (c:Control)<-[:GOVERNED_BY]-(p:AIProject)-[:BELONGS_TO]->(d:Department) "
+            "WITH c.name AS control, c.category AS category, count(DISTINCT d) AS department_count, "
+            "     count(DISTINCT p) AS project_count, collect(DISTINCT d.name) AS departments "
+            "RETURN control, category, department_count, project_count, departments "
+            "ORDER BY department_count DESC, project_count DESC"
+        )
+        control_hotspots = []
+        async for record in result:
+            control_hotspots.append({
+                "control": record["control"],
+                "category": record["category"],
+                "department_count": record["department_count"],
+                "project_count": record["project_count"],
+                "departments": [d for d in record["departments"] if d is not None],
+            })
+        insights["control_hotspots"] = control_hotspots
+
+        # 10. Unprotected Tool Chains — Tool ← Workflow → AIProject (no GOVERNED_BY) (3+ hops)
+        result = await session.run(
+            "MATCH (t:Tool)<-[:USES_TOOL]-(w:Workflow)-[:BECAME_PROJECT]->(p:AIProject) "
+            "WHERE NOT (p)-[:GOVERNED_BY]->(:Control) "
+            "WITH t.name AS tool, count(DISTINCT p) AS ungoverned_project_count, "
+            "     collect(DISTINCT p.name) AS project_names, collect(DISTINCT p.risk_level) AS risk_levels "
+            "RETURN tool, ungoverned_project_count, project_names, risk_levels "
+            "ORDER BY ungoverned_project_count DESC"
+        )
+        unprotected_tools = []
+        async for record in result:
+            unprotected_tools.append({
+                "tool": record["tool"],
+                "ungoverned_project_count": record["ungoverned_project_count"],
+                "project_names": list(record["project_names"]),
+                "risk_levels": list(record["risk_levels"]),
+            })
+        insights["unprotected_tools"] = unprotected_tools
+
     return insights
 
 

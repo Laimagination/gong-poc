@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import {
-  BarChart as ReBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
+  BarChart as ReBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Legend,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MetricCard } from "@/components/charts";
@@ -70,6 +70,38 @@ interface GraphInsights {
   lifecycle_pipeline: {
     department: string;
     stages: { status: string; count: number }[];
+  }[];
+  tool_cascade_risk: {
+    tool: string;
+    project_count: number;
+    department_count: number;
+    high_risk_count: number;
+    departments: string[];
+  }[];
+  compliance_coupled: {
+    dept_a: string;
+    dept_b: string;
+    shared_controls: number;
+    control_names: string[];
+  }[];
+  principle_risk: {
+    principle: string;
+    project_count: number;
+    avg_risk_score: number;
+    avg_benefit_score: number;
+  }[];
+  control_hotspots: {
+    control: string;
+    category: string;
+    department_count: number;
+    project_count: number;
+    departments: string[];
+  }[];
+  unprotected_tools: {
+    tool: string;
+    ungoverned_project_count: number;
+    project_names: string[];
+    risk_levels: string[];
   }[];
 }
 
@@ -273,6 +305,38 @@ export default function KnowledgeGraphPage() {
           value={insights ? insights.tool_sprawl.filter(t => t.department_count >= 3).length.toString() : "--"}
           sub="Used across 3+ departments"
           color="text-gong-purple-light"
+        />
+      </div>
+
+      {/* Graph Traversal Metric Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <MetricCard
+          label="Cascade Risk Tools"
+          value={insights?.tool_cascade_risk ? insights.tool_cascade_risk.filter(t => t.high_risk_count >= 2).length.toString() : "--"}
+          sub="Tools threatening 2+ high-risk projects"
+          color={
+            insights?.tool_cascade_risk
+              ? insights.tool_cascade_risk.filter(t => t.high_risk_count >= 2).length > 3
+                ? "text-red-500"
+                : insights.tool_cascade_risk.filter(t => t.high_risk_count >= 2).length > 1
+                  ? "text-amber-500"
+                  : "text-emerald-600"
+              : "text-text-primary"
+          }
+        />
+        <MetricCard
+          label="Ungoverned Exposure"
+          value={insights?.unprotected_tools ? insights.unprotected_tools.length.toString() : "--"}
+          sub={insights?.unprotected_tools ? `${insights.unprotected_tools.reduce((sum, t) => sum + t.ungoverned_project_count, 0)} projects without compliance` : undefined}
+          color={
+            insights?.unprotected_tools
+              ? insights.unprotected_tools.length > 5
+                ? "text-red-500"
+                : insights.unprotected_tools.length > 2
+                  ? "text-amber-500"
+                  : "text-emerald-600"
+              : "text-text-primary"
+          }
         />
       </div>
 
@@ -490,6 +554,197 @@ export default function KnowledgeGraphPage() {
               })()}
             </CardContent>
           </Card>
+        </div>
+      )}
+
+      {/* Graph Traversal Insights */}
+      {insights?.tool_cascade_risk && (
+        <div className="space-y-4">
+          <div>
+            <h2 className="text-lg font-display font-bold text-text-primary">
+              Graph Traversal Insights
+            </h2>
+            <p className="text-sm text-text-muted mt-0.5">
+              Multi-hop relationship analysis across the knowledge graph
+            </p>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Tool Cascade Risk */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Tool Cascade Risk</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={280}>
+                  <ReBarChart
+                    data={insights.tool_cascade_risk.slice(0, 8)}
+                    layout="vertical"
+                    margin={{ top: 4, right: 20, bottom: 4, left: 10 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" horizontal={false} />
+                    <XAxis type="number" tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} />
+                    <YAxis type="category" dataKey="tool" tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} width={120} />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: "#FFFFFF", border: "1px solid rgba(0,0,0,0.1)", borderRadius: "8px", boxShadow: "0 4px 20px rgba(0,0,0,0.08)", fontSize: "12px", color: "#0F172A" }}
+                      cursor={{ fill: "rgba(239,68,68,0.04)" }}
+                    />
+                    <Bar dataKey="high_risk_count" name="High-Risk Projects" radius={[0, 4, 4, 0]}>
+                      {insights.tool_cascade_risk.slice(0, 8).map((_, i) => (
+                        <Cell key={i} fill={i === 0 ? "#EF4444" : i < 3 ? "#F97316" : "#F59E0B"} />
+                      ))}
+                    </Bar>
+                  </ReBarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Compliance-Coupled Departments */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Compliance-Coupled Departments</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 max-h-[280px] overflow-y-auto">
+                  {insights.compliance_coupled.slice(0, 8).map((pair, i) => (
+                    <div key={i} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-text-primary">
+                          {pair.dept_a} <span className="text-text-muted mx-1">&harr;</span> {pair.dept_b}
+                        </p>
+                        <div className="flex gap-1 mt-1 flex-wrap">
+                          {pair.control_names.map((name) => (
+                            <span
+                              key={name}
+                              className="text-[10px] bg-red-50 text-red-700 px-1.5 py-0.5 rounded"
+                            >
+                              {name}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <span className="text-xs font-medium text-white bg-red-500 px-2 py-0.5 rounded-full shrink-0 ml-3">
+                        {pair.shared_controls} shared
+                      </span>
+                    </div>
+                  ))}
+                  {insights.compliance_coupled.length === 0 && (
+                    <p className="text-sm text-text-muted">No compliance coupling detected</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Principle-Risk Correlation */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Principle-Risk Correlation</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={280}>
+                  <ReBarChart
+                    data={insights.principle_risk}
+                    margin={{ top: 4, right: 20, bottom: 4, left: 10 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
+                    <XAxis dataKey="principle" tick={{ fontSize: 10, fill: "#94A3B8" }} axisLine={false} tickLine={false} interval={0} angle={-20} textAnchor="end" height={60} />
+                    <YAxis tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: "#FFFFFF", border: "1px solid rgba(0,0,0,0.1)", borderRadius: "8px", boxShadow: "0 4px 20px rgba(0,0,0,0.08)", fontSize: "12px", color: "#0F172A" }}
+                      cursor={{ fill: "rgba(35,95,246,0.04)" }}
+                    />
+                    <Legend wrapperStyle={{ fontSize: "11px" }} />
+                    <Bar dataKey="avg_risk_score" name="Avg Risk Score" fill="#EF4444" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="avg_benefit_score" name="Avg Benefit Score" fill="#10B981" radius={[4, 4, 0, 0]} />
+                  </ReBarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Control Reuse Hotspots */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Control Reuse Hotspots</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={280}>
+                  <ReBarChart
+                    data={insights.control_hotspots.slice(0, 8)}
+                    layout="vertical"
+                    margin={{ top: 4, right: 20, bottom: 4, left: 10 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" horizontal={false} />
+                    <XAxis type="number" tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} />
+                    <YAxis type="category" dataKey="control" tick={{ fontSize: 10, fill: "#94A3B8" }} axisLine={false} tickLine={false} width={140} />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: "#FFFFFF", border: "1px solid rgba(0,0,0,0.1)", borderRadius: "8px", boxShadow: "0 4px 20px rgba(0,0,0,0.08)", fontSize: "12px", color: "#0F172A" }}
+                      cursor={{ fill: "rgba(139,92,246,0.04)" }}
+                    />
+                    <Bar dataKey="department_count" name="Departments" radius={[0, 4, 4, 0]}>
+                      {insights.control_hotspots.slice(0, 8).map((entry, i) => {
+                        const CATEGORY_COLORS: Record<string, string> = {
+                          technical: "#235FF6",
+                          organizational: "#8B5CF6",
+                          governance: "#EF4444",
+                          operational: "#F59E0B",
+                        };
+                        return (
+                          <Cell key={i} fill={CATEGORY_COLORS[entry.category?.toLowerCase()] || "#64748B"} />
+                        );
+                      })}
+                    </Bar>
+                  </ReBarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Unprotected Tool Chains — full width */}
+            <Card className="lg:col-span-2">
+              <CardHeader>
+                <CardTitle>Unprotected Tool Chains</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 max-h-[320px] overflow-y-auto">
+                  {insights.unprotected_tools.map((tool) => {
+                    const hasHigh = tool.risk_levels.some(r => r === "high" || r === "critical");
+                    return (
+                      <div
+                        key={tool.tool}
+                        className={cn(
+                          "flex items-start gap-3 p-3 rounded-lg border-l-4",
+                          hasHigh ? "border-l-red-500 bg-red-50/50" : "border-l-amber-400 bg-amber-50/50"
+                        )}
+                      >
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm font-medium text-text-primary">{tool.tool}</p>
+                            <span className={cn(
+                              "text-[10px] font-medium px-2 py-0.5 rounded-full",
+                              hasHigh ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-700"
+                            )}>
+                              {tool.ungoverned_project_count} ungoverned
+                            </span>
+                          </div>
+                          <div className="flex gap-1 mt-1.5 flex-wrap">
+                            {tool.project_names.map((name) => (
+                              <span
+                                key={name}
+                                className="text-[10px] text-text-muted bg-white px-1.5 py-0.5 rounded border border-border"
+                              >
+                                {name}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  {insights.unprotected_tools.length === 0 && (
+                    <p className="text-sm text-emerald-600 font-medium">All tool chains are governed — no exposure detected</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       )}
 
