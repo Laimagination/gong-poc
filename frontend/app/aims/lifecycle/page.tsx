@@ -362,9 +362,9 @@ export default function LifecyclePipelinePage() {
                             style={{
                               width: `${(item.value / 10) * 100}%`,
                               backgroundColor:
-                                item.value <= 3
+                                item.value < 3
                                   ? "#10B981"
-                                  : item.value <= 6
+                                  : item.value < 5
                                     ? "#F59E0B"
                                     : "#EF4444",
                             }}

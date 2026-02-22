@@ -135,7 +135,7 @@ function ErrorBox({ message }: { message: string }) {
 function ImpactBar({ label, value, max = 10 }: { label: string; value: number; max?: number }) {
   const pct = Math.min((value / max) * 100, 100);
   const color =
-    value < 4 ? "bg-gong-success" : value <= 6 ? "bg-gong-warning" : "bg-gong-danger";
+    value < 3 ? "bg-gong-success" : value < 5 ? "bg-gong-warning" : "bg-gong-danger";
 
   return (
     <div className="space-y-1">
@@ -482,9 +482,9 @@ export default function RiskMatrixPage() {
                         Risk Score
                       </p>
                       <p className={`text-xl font-bold ${
-                        detail.risk_score < 4
+                        detail.risk_score < 3
                           ? "text-gong-success"
-                          : detail.risk_score <= 6
+                          : detail.risk_score < 5
                             ? "text-gong-warning"
                             : "text-gong-danger"
                       }`}>

@@ -154,9 +154,9 @@ export default function AIMSDashboard() {
   const d = dashboard.data!;
 
   const riskColor =
-    d.avg_risk_score < 4
+    d.avg_risk_score < 3
       ? "text-gong-success"
-      : d.avg_risk_score <= 6
+      : d.avg_risk_score < 5
         ? "text-gong-warning"
         : "text-gong-danger";
 
