@@ -356,14 +356,12 @@ async def full_sync() -> None:
         )
 
         # Control -[PART_OF]-> ControlFramework
-        # Impact and operational controls are internal-only, not yet mapped
-        # to the ISO 42001 framework.  The base risk control (A.6.2.2) and
-        # ethical/legal controls ARE mapped, so the compliance chain gap
-        # only appears for projects that have unmapped controls mixed in.
+        # Most controls are mapped to the ISO 42001 framework, but the
+        # advanced operational monitoring controls (A.10.4-6) are still
+        # pending formal framework alignment — they represent internal
+        # best-practices not yet ratified in the standard.
         _INTERNAL_ONLY_CONTROLS = {
-            "A.6.2.4",                                      # risk treatment
-            "A.7.3", "A.7.4",                              # impact
-            "A.10.2", "A.10.3", "A.10.4", "A.10.5", "A.10.6",  # operations
+            "A.10.4", "A.10.5", "A.10.6",  # advanced operations monitoring
         }
         fw_gid = f"ControlFramework-{FRAMEWORK['id']}"
         po_batch = [
