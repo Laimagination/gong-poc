@@ -234,12 +234,26 @@ def _generate_projects_and_events() -> tuple[list[AIProject], list[AIMSEvent]]:
 
 
 async def seed_if_empty():
-    """Seed AI projects and events if the ai_projects table is empty."""
+    """Seed AI projects and events if the ai_projects table is empty or stale."""
     async with async_session() as db:
         count_result = await db.execute(select(func.count(AIProject.id)))
         count = count_result.scalar() or 0
+
         if count > 0:
-            return
+            # Check if risk levels include all expected categories
+            distinct_levels = await db.execute(
+                select(AIProject.risk_level).distinct()
+            )
+            db_levels = {row[0] for row in distinct_levels}
+            expected_levels = {"low", "medium", "high", "critical"}
+            if db_levels == expected_levels:
+                return  # Already seeded with current risk model
+
+            # Stale risk data — delete and reseed
+            from sqlalchemy import delete
+            await db.execute(delete(AIMSEvent))
+            await db.execute(delete(AIProject))
+            await db.flush()
 
         projects, events = _generate_projects_and_events()
         db.add_all(projects)

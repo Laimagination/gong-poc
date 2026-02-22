@@ -30,16 +30,16 @@ def _load_controls() -> list[dict]:
 
 # High-touch departments: higher stakeholder impact base
 _STAKEHOLDER_BASE: dict[str, float] = {
-    "sales": 7.0,
-    "customer_success": 6.5,
+    "sales": 8.0,
+    "customer_success": 7.5,
     "marketing": 5.0,
     "support": 5.5,
-    "finance": 4.5,
-    "product": 4.0,
-    "engineering": 3.5,
+    "finance": 5.0,
+    "product": 3.0,
+    "engineering": 2.0,
     "legal": 4.0,
-    "people_hr": 5.0,
-    "it": 3.0,
+    "people_hr": 5.5,
+    "it": 1.5,
 }
 
 # Tools that handle PII or sensitive personal data
@@ -63,8 +63,8 @@ def score_stakeholder(wf: dict) -> float:
     """Stakeholder Impact based on department + frequency."""
     base = _STAKEHOLDER_BASE.get(wf["department"], 4.0)
     occ = wf.get("occurrences_per_month", 1)
-    # frequency multiplier: daily (>20/mo) adds up to 3, weekly ~1.5, monthly ~0.5
-    freq_add = min(math.log2(max(occ, 1)) / math.log2(600) * 3.0, 3.0)
+    # frequency multiplier: daily (>20/mo) adds up to 4, weekly ~2, monthly ~0.5
+    freq_add = min(math.log2(max(occ, 1)) / math.log2(300) * 4.0, 4.0)
     return round(min(base + freq_add, 10.0), 2)
 
 
@@ -72,21 +72,25 @@ def score_ethical(wf: dict) -> float:
     """Ethical Risk based on data sensitivity of current tools."""
     tools = set(wf.get("current_tools", []))
     pii_count = len(tools & _PII_TOOLS)
-    base = 2.0
-    base += pii_count * 1.8
+    base = 1.0
+    base += pii_count * 3.0
     # LinkedIn / personal data tools add extra
     if "LinkedIn Sales Navigator" in tools:
-        base += 1.0
+        base += 1.5
     return round(min(base, 10.0), 2)
 
 
 def score_legal(wf: dict) -> float:
     """Legal/Regulatory Risk based on department and compliance tools."""
     dept = wf["department"]
-    base = 6.0 if dept in _HIGH_REG_DEPTS else 3.0
+    base = 7.0 if dept in _HIGH_REG_DEPTS else 1.5
     tools = set(wf.get("current_tools", []))
     compliance_count = len(tools & _COMPLIANCE_TOOLS)
-    base += compliance_count * 1.5
+    base += compliance_count * 2.0
+    # PII tools in regulated departments amplify legal risk
+    if dept in _HIGH_REG_DEPTS:
+        pii_count = len(tools & _PII_TOOLS)
+        base += pii_count * 1.0
     return round(min(base, 10.0), 2)
 
 
@@ -94,11 +98,11 @@ def score_operational(wf: dict) -> float:
     """Operational Risk based on build hours + integration complexity."""
     hours = wf.get("estimated_build_hours", 60)
     num_tools = len(wf.get("current_tools", []))
-    # hours: 20->2, 120->8
-    hours_score = 2.0 + ((hours - 20) / (120 - 20)) * 6.0
-    hours_score = max(min(hours_score, 8.0), 2.0)
-    # Each integration tool adds ~0.5
-    tool_add = min(num_tools * 0.5, 3.0)
+    # hours: 20->1, 120->9
+    hours_score = 1.0 + ((hours - 20) / (120 - 20)) * 8.0
+    hours_score = max(min(hours_score, 9.0), 1.0)
+    # Each integration tool adds ~0.4
+    tool_add = min(num_tools * 0.4, 2.0)
     return round(min(hours_score + tool_add, 10.0), 2)
 
 
@@ -106,8 +110,8 @@ def score_operational(wf: dict) -> float:
 
 _WEIGHTS = {
     "stakeholder": 0.30,
-    "ethical": 0.25,
-    "legal": 0.25,
+    "ethical": 0.28,
+    "legal": 0.22,
     "operational": 0.20,
 }
 
