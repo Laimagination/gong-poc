@@ -185,8 +185,9 @@ async def get_graph_insights() -> dict:
         result = await session.run(
             "MATCH (p:AIProject) "
             "OPTIONAL MATCH (p)-[:GOVERNED_BY]->(c:Control) "
+            "OPTIONAL MATCH (c)-[:PART_OF]->(f:ControlFramework) "
             "WITH p, count(c) AS total_ctrls, "
-            "     sum(CASE WHEN exists((c)-[:PART_OF]->(:ControlFramework)) THEN 1 ELSE 0 END) AS linked_ctrls "
+            "     sum(CASE WHEN f IS NOT NULL THEN 1 ELSE 0 END) AS linked_ctrls "
             "RETURN count(p) AS total, "
             "       sum(CASE WHEN total_ctrls > 0 AND total_ctrls = linked_ctrls THEN 1 ELSE 0 END) AS fully_linked"
         )
