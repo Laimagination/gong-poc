@@ -5,6 +5,9 @@ import dynamic from "next/dynamic";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/utils";
 import { cn } from "@/lib/utils";
+import {
+  BarChart as ReBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
+} from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MetricCard } from "@/components/charts";
 
@@ -38,6 +41,36 @@ interface GraphStats {
   relationships: Record<string, number>;
   total_nodes: number;
   total_relationships: number;
+}
+
+interface GraphInsights {
+  governance_coverage: {
+    total_projects: number;
+    governed_count: number;
+    coverage_pct: number;
+    ungoverned_projects: string[];
+  };
+  compliance_chain: {
+    total_projects: number;
+    fully_linked: number;
+    completeness_pct: number;
+  };
+  department_risk: {
+    department: string;
+    total_projects: number;
+    high_risk_count: number;
+    breakdown: { risk_level: string; count: number }[];
+  }[];
+  tool_sprawl: {
+    tool: string;
+    workflow_count: number;
+    department_count: number;
+    departments: string[];
+  }[];
+  lifecycle_pipeline: {
+    department: string;
+    stages: { status: string; count: number }[];
+  }[];
 }
 
 /* ---------- constants ---------- */
@@ -87,6 +120,11 @@ export default function KnowledgeGraphPage() {
   const { data: stats } = useQuery<GraphStats>({
     queryKey: ["graph", "stats"],
     queryFn: () => apiFetch("/graph/stats"),
+  });
+
+  const { data: insights } = useQuery<GraphInsights>({
+    queryKey: ["graph", "insights"],
+    queryFn: () => apiFetch("/graph/insights"),
   });
 
   const { data: deptGraph } = useQuery<GraphData>({
@@ -186,29 +224,55 @@ export default function KnowledgeGraphPage() {
         </p>
       </div>
 
-      {/* Metrics */}
+      {/* Insight Metrics */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
-          label="Nodes"
-          value={stats ? stats.total_nodes.toLocaleString() : "--"}
-          sub="Total graph nodes"
+          label="Governance Coverage"
+          value={insights ? `${insights.governance_coverage.coverage_pct}%` : "--"}
+          sub={insights ? `${insights.governance_coverage.governed_count} of ${insights.governance_coverage.total_projects} projects governed` : undefined}
+          color={
+            insights
+              ? insights.governance_coverage.coverage_pct >= 80
+                ? "text-emerald-600"
+                : insights.governance_coverage.coverage_pct >= 60
+                  ? "text-amber-500"
+                  : "text-red-500"
+              : "text-text-primary"
+          }
         />
         <MetricCard
-          label="Relationships"
-          value={stats ? stats.total_relationships.toLocaleString() : "--"}
-          sub="Total graph edges"
+          label="Compliance Chain"
+          value={insights ? `${insights.compliance_chain.completeness_pct}%` : "--"}
+          sub="Linked to ISO 42001"
+          color={
+            insights
+              ? insights.compliance_chain.completeness_pct >= 80
+                ? "text-emerald-600"
+                : insights.compliance_chain.completeness_pct >= 60
+                  ? "text-amber-500"
+                  : "text-red-500"
+              : "text-text-primary"
+          }
         />
         <MetricCard
-          label="Departments"
-          value={stats?.nodes?.Department?.toString() || "--"}
-          sub="Organizational units"
+          label="High-Risk Projects"
+          value={insights ? insights.department_risk.reduce((sum, d) => sum + d.high_risk_count, 0).toString() : "--"}
+          sub={insights ? `Across ${insights.department_risk.filter(d => d.high_risk_count > 0).length} departments` : undefined}
+          color={
+            insights
+              ? insights.department_risk.reduce((sum, d) => sum + d.high_risk_count, 0) > 5
+                ? "text-red-500"
+                : insights.department_risk.reduce((sum, d) => sum + d.high_risk_count, 0) > 2
+                  ? "text-amber-500"
+                  : "text-emerald-600"
+              : "text-text-primary"
+          }
+        />
+        <MetricCard
+          label="Shared Tools"
+          value={insights ? insights.tool_sprawl.filter(t => t.department_count >= 3).length.toString() : "--"}
+          sub="Used across 3+ departments"
           color="text-gong-purple-light"
-        />
-        <MetricCard
-          label="AI Projects"
-          value={stats?.nodes?.AIProject?.toString() || "--"}
-          sub="Tracked in AIMS"
-          color="text-emerald-600"
         />
       </div>
 
@@ -308,6 +372,126 @@ export default function KnowledgeGraphPage() {
             </div>
           ))}
       </div>
+
+      {/* Insights Section */}
+      {insights && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Risk Concentration by Department */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Risk Concentration by Department</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={280}>
+                <ReBarChart
+                  data={insights.department_risk.filter(d => d.high_risk_count > 0).sort((a, b) => b.high_risk_count - a.high_risk_count)}
+                  layout="vertical"
+                  margin={{ top: 4, right: 20, bottom: 4, left: 10 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" horizontal={false} />
+                  <XAxis type="number" tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} />
+                  <YAxis type="category" dataKey="department" tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} width={120} />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: "#FFFFFF", border: "1px solid rgba(0,0,0,0.1)", borderRadius: "8px", boxShadow: "0 4px 20px rgba(0,0,0,0.08)", fontSize: "12px", color: "#0F172A" }}
+                    cursor={{ fill: "rgba(239,68,68,0.04)" }}
+                  />
+                  <Bar dataKey="high_risk_count" name="High-Risk Projects" radius={[0, 4, 4, 0]}>
+                    {insights.department_risk.filter(d => d.high_risk_count > 0).sort((a, b) => b.high_risk_count - a.high_risk_count).map((_, i) => (
+                      <Cell key={i} fill={i === 0 ? "#EF4444" : i < 3 ? "#F97316" : "#F59E0B"} />
+                    ))}
+                  </Bar>
+                </ReBarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          {/* Top Shared Tools */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Top Shared Tools</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3 max-h-[280px] overflow-y-auto">
+                {insights.tool_sprawl.slice(0, 8).map((tool) => (
+                  <div key={tool.tool} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-text-primary truncate">{tool.tool}</p>
+                      <div className="flex gap-1 mt-1 flex-wrap">
+                        {tool.departments.map((dept) => (
+                          <span
+                            key={dept}
+                            className="inline-block w-2 h-2 rounded-full"
+                            title={dept}
+                            style={{ backgroundColor: NODE_COLORS.Department }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex gap-4 text-xs text-text-muted shrink-0 ml-3">
+                      <span>{tool.workflow_count} workflows</span>
+                      <span className="font-medium text-text-primary">{tool.department_count} depts</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Lifecycle Pipeline — full width */}
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle>Lifecycle Pipeline</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {(() => {
+                const allStatuses = Array.from(
+                  new Set(insights.lifecycle_pipeline.flatMap(d => d.stages.map(s => s.status)))
+                ).sort();
+                const STATUS_COLORS: Record<string, string> = {
+                  active: "#10B981",
+                  "in_review": "#06B6D4",
+                  planning: "#235FF6",
+                  completed: "#8B5CF6",
+                  on_hold: "#F59E0B",
+                  retired: "#64748B",
+                };
+                const chartData = insights.lifecycle_pipeline.map(d => {
+                  const row: Record<string, string | number> = { department: d.department };
+                  for (const s of d.stages) row[s.status] = s.count;
+                  return row;
+                });
+                return (
+                  <ResponsiveContainer width="100%" height={280}>
+                    <ReBarChart
+                      data={chartData}
+                      layout="vertical"
+                      margin={{ top: 4, right: 20, bottom: 4, left: 10 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" horizontal={false} />
+                      <XAxis type="number" tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} />
+                      <YAxis type="category" dataKey="department" tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} width={120} />
+                      <Tooltip
+                        contentStyle={{ backgroundColor: "#FFFFFF", border: "1px solid rgba(0,0,0,0.1)", borderRadius: "8px", boxShadow: "0 4px 20px rgba(0,0,0,0.08)", fontSize: "12px", color: "#0F172A" }}
+                        cursor={{ fill: "rgba(35,95,246,0.04)" }}
+                      />
+                      {allStatuses.map((status, i) => (
+                        <Bar
+                          key={status}
+                          dataKey={status}
+                          name={status.replace(/_/g, " ")}
+                          stackId="pipeline"
+                          fill={STATUS_COLORS[status] || ["#235FF6", "#06B6D4", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"][i % 6]}
+                          radius={i === allStatuses.length - 1 ? [0, 4, 4, 0] : undefined}
+                        />
+                      ))}
+                    </ReBarChart>
+                  </ResponsiveContainer>
+                );
+              })()}
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Selected Node Detail */}
       {selectedNode && (

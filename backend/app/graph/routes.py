@@ -3,7 +3,7 @@
 from fastapi import APIRouter, HTTPException
 
 from .connection import check_health
-from .queries import get_full_graph, get_department_subgraph, get_project_lineage, get_graph_stats
+from .queries import get_full_graph, get_department_subgraph, get_project_lineage, get_graph_stats, get_graph_insights
 
 router = APIRouter()
 
@@ -43,6 +43,15 @@ async def project_lineage(project_id: int):
     """Compliance lineage for a single project."""
     try:
         return await get_project_lineage(project_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/insights")
+async def graph_insights():
+    """Cross-module insight data from the knowledge graph."""
+    try:
+        return await get_graph_insights()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

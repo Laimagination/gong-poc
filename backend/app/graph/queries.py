@@ -155,6 +155,111 @@ async def get_project_lineage(project_id: int) -> dict:
     return {"nodes": nodes, "links": links}
 
 
+async def get_graph_insights() -> dict:
+    """Return cross-module insight data from the knowledge graph."""
+    driver = get_driver()
+    insights: dict = {}
+
+    async with driver.session() as session:
+        # 1. Governance Coverage — projects with vs without GOVERNED_BY
+        result = await session.run(
+            "MATCH (p:AIProject) "
+            "OPTIONAL MATCH (p)-[:GOVERNED_BY]->(c:Control) "
+            "WITH p, count(c) AS ctrl_count "
+            "RETURN count(p) AS total, "
+            "       sum(CASE WHEN ctrl_count > 0 THEN 1 ELSE 0 END) AS governed, "
+            "       collect(CASE WHEN ctrl_count = 0 THEN p.name ELSE null END) AS ungoverned_names"
+        )
+        rec = await result.single()
+        total = rec["total"] if rec else 0
+        governed = rec["governed"] if rec else 0
+        ungoverned_names = [n for n in (rec["ungoverned_names"] if rec else []) if n is not None]
+        insights["governance_coverage"] = {
+            "total_projects": total,
+            "governed_count": governed,
+            "coverage_pct": round(governed / total * 100, 1) if total else 0,
+            "ungoverned_projects": ungoverned_names,
+        }
+
+        # 2. Compliance Chain — projects fully linked to a ControlFramework
+        result = await session.run(
+            "MATCH (p:AIProject) "
+            "OPTIONAL MATCH (p)-[:GOVERNED_BY]->(c:Control)-[:PART_OF]->(f:ControlFramework) "
+            "WITH p, count(f) AS framework_count "
+            "RETURN count(p) AS total, "
+            "       sum(CASE WHEN framework_count > 0 THEN 1 ELSE 0 END) AS fully_linked"
+        )
+        rec = await result.single()
+        total = rec["total"] if rec else 0
+        fully_linked = rec["fully_linked"] if rec else 0
+        insights["compliance_chain"] = {
+            "total_projects": total,
+            "fully_linked": fully_linked,
+            "completeness_pct": round(fully_linked / total * 100, 1) if total else 0,
+        }
+
+        # 3. Department Risk Concentration
+        result = await session.run(
+            "MATCH (p:AIProject)-[:BELONGS_TO]->(d:Department) "
+            "WITH d.name AS department, p.risk_level AS risk, count(p) AS cnt "
+            "ORDER BY department, risk "
+            "WITH department, collect({risk_level: risk, count: cnt}) AS breakdown, "
+            "     sum(cnt) AS total, "
+            "     sum(CASE WHEN risk = 'high' THEN cnt ELSE 0 END) AS high_risk "
+            "RETURN department, total, high_risk, breakdown "
+            "ORDER BY high_risk DESC"
+        )
+        dept_risk = []
+        async for record in result:
+            dept_risk.append({
+                "department": record["department"],
+                "total_projects": record["total"],
+                "high_risk_count": record["high_risk"],
+                "breakdown": [dict(b) for b in record["breakdown"]],
+            })
+        insights["department_risk"] = dept_risk
+
+        # 4. Tool Sprawl — tools shared across workflows and departments
+        result = await session.run(
+            "MATCH (w:Workflow)-[:USES_TOOL]->(t:Tool) "
+            "OPTIONAL MATCH (w)<-[:HAS_WORKFLOW]-(d:Department) "
+            "WITH t.name AS tool, "
+            "     count(DISTINCT w) AS workflow_count, "
+            "     count(DISTINCT d) AS department_count, "
+            "     collect(DISTINCT d.name) AS departments "
+            "RETURN tool, workflow_count, department_count, departments "
+            "ORDER BY department_count DESC, workflow_count DESC"
+        )
+        tool_sprawl = []
+        async for record in result:
+            tool_sprawl.append({
+                "tool": record["tool"],
+                "workflow_count": record["workflow_count"],
+                "department_count": record["department_count"],
+                "departments": [d for d in record["departments"] if d is not None],
+            })
+        insights["tool_sprawl"] = tool_sprawl
+
+        # 5. Lifecycle Pipeline — projects grouped by department × status
+        result = await session.run(
+            "MATCH (p:AIProject)-[:BELONGS_TO]->(d:Department) "
+            "WITH d.name AS department, p.status AS status, count(p) AS cnt "
+            "ORDER BY department, status "
+            "WITH department, collect({status: status, count: cnt}) AS stages "
+            "RETURN department, stages "
+            "ORDER BY department"
+        )
+        pipeline = []
+        async for record in result:
+            pipeline.append({
+                "department": record["department"],
+                "stages": [dict(s) for s in record["stages"]],
+            })
+        insights["lifecycle_pipeline"] = pipeline
+
+    return insights
+
+
 async def get_graph_stats() -> dict:
     """Return node and relationship counts by type."""
     driver = get_driver()
