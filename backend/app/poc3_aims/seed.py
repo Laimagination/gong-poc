@@ -10,7 +10,7 @@ from __future__ import annotations
 import random
 from datetime import datetime, timedelta
 
-from sqlalchemy import select, func
+from sqlalchemy import select, func, cast, String
 
 from ..database import async_session
 from ..models import AIProject, AIMSEvent
@@ -248,9 +248,10 @@ async def seed_if_empty():
             expected_levels = {"low", "medium", "high", "critical"}
 
             # Check that governance gap exists (some projects with empty controls)
+            # JSON columns in SQLite store as text, so check for NULL or '[]'
             ungoverned = await db.execute(
                 select(func.count(AIProject.id)).where(
-                    (AIProject.controls == None) | (AIProject.controls == [])  # noqa: E711
+                    (AIProject.controls == None) | (cast(AIProject.controls, String) == "[]")  # noqa: E711
                 )
             )
             has_governance_gap = (ungoverned.scalar() or 0) > 0
